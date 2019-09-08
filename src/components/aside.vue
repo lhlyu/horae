@@ -57,7 +57,7 @@
         },
         methods:{
             menuSelect:function(index){
-                this.$alert(index)
+                this.$message(index)
                 this.$emit('select',index)
             }
         }
@@ -65,6 +65,7 @@
 </script>
 
 <style scoped lang="less">
+
     .el-menu{
         overflow: hidden;
         border-right: none;

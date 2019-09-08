@@ -1,14 +1,14 @@
 <template>
     <div class="container">
-        <el-container>
-            <el-header style="height: auto;padding: 0">
-                <headerNav @collapse="collapseHandler"></headerNav>
+        <el-container class="yu1">
+            <el-header class="yu2" style="height: auto;padding: 0">
+                <headerNav class="yu3" @collapse="collapseHandler"></headerNav>
             </el-header>
             <el-container>
-                <el-aside :class="aside" style="width: unset">
+                <el-aside :class="aside" style="width: unset;height: unset;overflow: unset">
                     <asideNav :collapse="collapse"></asideNav>
                 </el-aside>
-                <el-main style="padding: 0">
+                <el-main style="padding: 0;border-left: solid 1px #e6e6e6;">
                     <right></right>
                 </el-main>
             </el-container>
@@ -65,15 +65,14 @@
                 overflow: hidden;
                 height: 100%;
                 box-sizing: border-box;
-                border-right: @borderLine;
                 background-color: rgba(255,255,255,0.8);
             }
             .aside-open{
-                width: 200px !important;
+                width: 210px !important;
                 transition: all 0.5s ease;
             }
             .aside-close{
-                width: 60px !important;
+                width: 70px !important;
                 transition: all 0.7s ease;
             }
         }

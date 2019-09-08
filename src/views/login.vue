@@ -32,7 +32,7 @@
         data() {
             return {
                 account: "test",
-                password: "",
+                password: "1",
                 tip:"输入任意用户和密码即可"
             }
         },
@@ -56,7 +56,7 @@
 <style scoped lang="less">
     .container{
         width: 100vw;
-        height: 100vh;
+        min-height: 100vh;
         text-align: center;
         .login{
             width: 100%;
@@ -66,7 +66,7 @@
             .login-con{
                 border: 10px solid rgba(255,255,255,0.13);
                 position: absolute;
-                right: calc(50% - 150px);
+                right: calc(50% - 155px);
                 top: calc(50% - 125px);
                 width: 300px;
                 height: 250px;
