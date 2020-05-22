@@ -1,20 +1,25 @@
 <template>
-    <div class="container">
+    <div>
 
     </div>
 </template>
 
 <script>
+
+
     export default {
-        name: "layout",
+        name: "home",
+        components:{
+        },
         data(){
             return {
+
+            }
+        },
+        methods:{
+            init(){
 
             }
         }
     }
 </script>
-
-<style scoped lang="less">
-
-</style>

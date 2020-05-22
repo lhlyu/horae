@@ -1,5 +1,5 @@
+const isProduction = process.env.NODE_ENV === 'production'
+
 module.exports = {
-    publicPath: process.env.NODE_ENV === 'production'
-        ? '/horae/'
-        : '/'
+    publicPath: isProduction ? 'https://cdn.jsdelivr.net/gh/lhlyu/horae@master/' : '/'
 }

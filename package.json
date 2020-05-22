@@ -1,64 +1,29 @@
 {
   "name": "horae",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
+    "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint",
-    "start": "vue-cli-service serve",
-    "test:unit": "vue-cli-service test:unit"
+    "docs": "vue-cli-service build --dest docs --report"
   },
   "dependencies": {
-    "core-js": "^2.6.5",
-    "element-ui": "^2.4.5",
-    "vue": "^2.6.10",
-    "vue-router": "^3.0.3",
-    "vuex": "^3.0.1"
+    "aos": "^3.0.0-beta.6",
+    "core-js": "^3.6.4",
+    "element-ui": "^2.13.2",
+    "ismobilejs": "^1.0.3",
+    "vue": "^2.6.11",
+    "vue-router": "^3.1.5",
+    "vuex": "^3.1.2"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.11.0",
-    "@vue/cli-plugin-eslint": "^3.11.0",
-    "@vue/cli-plugin-unit-mocha": "^3.11.0",
-    "@vue/cli-service": "^3.11.0",
-    "@vue/test-utils": "1.0.0-beta.29",
-    "babel-eslint": "^10.0.1",
-    "babel-plugin-component": "^1.1.1",
-    "chai": "^4.1.2",
-    "eslint": "^5.16.0",
-    "eslint-plugin-vue": "^5.0.0",
-    "less": "^3.0.4",
-    "less-loader": "^5.0.0",
-    "vue-cli-plugin-element": "^1.0.1",
-    "vue-template-compiler": "^2.6.10"
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
-    },
-    "extends": [
-      "plugin:vue/essential",
-      "eslint:recommended"
-    ],
-    "rules": {},
-    "parserOptions": {
-      "parser": "babel-eslint"
-    },
-    "overrides": [
-      {
-        "files": [
-          "**/__tests__/*.{j,t}s?(x)"
-        ],
-        "env": {
-          "mocha": true
-        }
-      }
-    ]
-  },
-  "postcss": {
-    "plugins": {
-      "autoprefixer": {}
-    }
+    "@vue/cli-plugin-babel": "^4.2.0",
+    "@vue/cli-plugin-router": "^4.2.0",
+    "@vue/cli-plugin-vuex": "^4.2.0",
+    "@vue/cli-service": "^4.2.0",
+    "node-sass": "^4.12.0",
+    "sass-loader": "^8.0.2",
+    "vue-template-compiler": "^2.6.11"
   },
   "browserslist": [
     "> 1%",

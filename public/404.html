@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        sessionStorage.redirect = location.href;
+    </script>
+    <script>
+        (function(){
+            var redirect = sessionStorage.redirect;
+            delete sessionStorage.redirect;
+            if (redirect && redirect != location.href) {
+                history.replaceState(null, null, redirect);
+            }
+        })();
+    </script>
+    <meta http-equiv="refresh" content="0;URL='/'"></meta>
+
+
+    <title>404</title>
+</head>
+<body>
+
+</body>
+</html>
