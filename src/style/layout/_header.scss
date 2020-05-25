@@ -1,0 +1,15 @@
+.u-header{
+    display: flex;
+    justify-content: space-between;
+    &__left{
+        i{
+            font-size: 20px;
+            line-height: 44px;
+            font-weight: 400;
+            cursor: pointer;
+        }
+    }
+    &__right{
+
+    }
+}
