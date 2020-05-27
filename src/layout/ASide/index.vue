@@ -24,28 +24,20 @@
 </template>
 
 <script>
-    export default {
-        name: "index",
-        data(){
-            return {
-                items: [{
-                    name: "仪表板",
-                    icon: "el-icon-location",
-                    children: []
-                },{
-                    name: "管理",
-                    icon: "el-icon-setting",
-                    children: [{
-                        name: "网站",
-                        icon: "",
-                        children: []
-                    },{
-                        name: "日志",
-                        icon: "",
-                        children: []
-                    }]
-                }]
-            }
-        }
+
+  import {mapState} from "vuex"
+
+  export default {
+    name: "index",
+    data(){
+      return {
+
+      }
+    },
+    computed:{
+      ...mapState({
+        items: state => state.layout.menuItems
+      })
     }
+  }
 </script>

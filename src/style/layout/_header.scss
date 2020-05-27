@@ -1,15 +1,20 @@
 .u-header{
-    display: flex;
-    justify-content: space-between;
-    &__left{
-        i{
-            font-size: 20px;
-            line-height: 44px;
-            font-weight: 400;
-            cursor: pointer;
-        }
+  display: flex;
+  justify-content: space-between;
+  &__left{
+    padding-left: 10px;
+    i{
+      font-size: 25px;
+      line-height: 60px;
+      font-weight: 400;
+      cursor: pointer;
     }
-    &__right{
+    .u-rotate-180{
+      transform: rotate(180deg);
+    }
+  }
+  &__right{
 
-    }
+  }
 }
+

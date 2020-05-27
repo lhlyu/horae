@@ -1,12 +1,18 @@
 <template>
     <div>
-        123123
+      <Power>123123</Power>
     </div>
 </template>
 
 <script>
+
+    import Power from "@/components/Power"
+
     export default {
-        name: "index"
+        name: "index",
+        components:{
+          Power
+        }
     }
 </script>
 
