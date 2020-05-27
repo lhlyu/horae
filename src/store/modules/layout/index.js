@@ -9,23 +9,7 @@ export default {
       to: "",
       name:"首页"
     }],
-    menuItems: [{
-      name: "仪表板",
-      icon: "el-icon-location",
-      children: []
-    },{
-      name: "管理",
-      icon: "el-icon-setting",
-      children: [{
-        name: "网站",
-        icon: "",
-        children: []
-      },{
-        name: "日志",
-        icon: "",
-        children: []
-      }]
-    }]
+    menuItems: []
   },
   getters:{
 
@@ -38,8 +22,8 @@ export default {
       state.breadcrumbItems = items
     },
     SET_MENULIST(state,items){
-        state.menubar = items
-    }
+      state.menuItems = items
+    },
   },
   actions: { // this.$store.dispatch
     SET_MENULIST ({commit}, items) {

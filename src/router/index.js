@@ -1,22 +1,22 @@
 import Vue from "vue"
 import VueRouter from "vue-router"
-import Layout from "@/layout/index.vue"
 
-import Index from "@/views/index/index.vue"
+import Login from "@/views/login/index.vue"
+import NotFound from "@/views/404.vue"
 
 Vue.use(VueRouter)
 
 const routes = [
-    {
-        path: "/",
-        name:"layout",
-        component: Layout,
-        children: [{
-            path: "/",
-            name:"index",
-            component: Index
-        }]
-    }
+  {
+    path: "/",
+    name:"login",
+    component: Login
+  },
+  {
+    path: "*",
+    name: "notfound",
+    component: NotFound
+  }
 ]
 
 const router = new VueRouter({
