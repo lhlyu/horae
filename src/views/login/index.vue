@@ -5,20 +5,28 @@
 </template>
 
 <script>
-  import {mapMutations} from "vuex"
-  import {getMenus,getDynamicRoutes} from "@/router/dynamic.js"
+  import {mapState,mapMutations} from "vuex"
+  import {getRoutes,getDynamicRoutes} from "@/router/dynamic.js"
 
   export default {
     name: "index",
     methods:{
       ...mapMutations({
         login(commit) {
-          let items = getMenus([101,102,103,20101,20102,20103])
+          let items = getRoutes(this.codes)
+          let routers = getDynamicRoutes(items)
           commit("SET_MENULIST", items)
-          let menus = getDynamicRoutes(items)
-          this.$router.addRoutes(menus)
+          commit("SET_TOKEN", +new Date())
+          commit("SET_ROUTERS", routers)
+          commit("SET_ACTIVEMENU")
+          this.$router.addRoutes(routers)
           this.$router.push({path:"/admin"})
         }
+      })
+    },
+    computed:{
+      ...mapState({
+        codes: state => state.user.codes
       })
     }
   }

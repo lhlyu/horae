@@ -7,9 +7,7 @@
                 <el-breadcrumb-item v-for="(item,i) in breadcrumbItems" :key="i" :to="{ path: `${item.to}` }">{{item.name}}</el-breadcrumb-item>
             </el-breadcrumb>
             <el-main>
-                <keep-alive>
-                    <router-view></router-view>
-                </keep-alive>
+                <router-view></router-view>
             </el-main>
             <el-footer><Footer></Footer></el-footer>
         </el-container>

@@ -1,15 +1,15 @@
 import isMobile from  "ismobilejs"
 
+const defaultActive = "/admin/board"
+const defualtBreadcrumbItems = {to: "",name:"管理"}
 // vue 官方建议mutations，actions名字大写,全局唯一性
 // layout module
 export default {
   state: {
-    fold: isMobile().apple.phone,
-    breadcrumbItems:[{
-      to: "",
-      name:"首页"
-    }],
-    menuItems: []
+    fold: isMobile().apple.phone,             // 是否是移动端
+    breadcrumbItems:[defualtBreadcrumbItems], // 面包屑
+    menuItems: [],                            // 菜单
+    activeMenu: defaultActive                 // 当前激活菜单
   },
   getters:{
 
@@ -18,16 +18,24 @@ export default {
     SET_FOLDER(state,val){
         state.fold = val
     },
-    SET_BREADCRUMBITEMS(state,items){
-      state.breadcrumbItems = items
+    SET_BREADCRUMBITEMS(state,val){
+      state.breadcrumbItems = val
     },
-    SET_MENULIST(state,items){
-      state.menuItems = items
+    SET_MENULIST(state,val){
+      state.menuItems = val
+    },
+    SET_ACTIVEMENU(state,val){
+      let breadcrumbItems = [defualtBreadcrumbItems]
+      if(!val || val == ""){
+        val = defaultActive
+      }
+      state.breadcrumbItems = breadcrumbItems
+      state.activeMenu = val
     },
   },
   actions: { // this.$store.dispatch
-    SET_MENULIST ({commit}, items) {
-        commit("setMenuList", items)
+    SET_MENULIST ({commit}, val) {
+        commit("setMenuList", val)
     }
   }
 }

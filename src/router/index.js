@@ -1,28 +1,32 @@
 import Vue from "vue"
 import VueRouter from "vue-router"
 
-import Login from "@/views/login/index.vue"
-import NotFound from "@/views/404.vue"
+import {routes} from "./route"
+import store from "@/store/index.js"
+import {getRoutes,getDynamicRoutes} from "@/router/dynamic.js"
 
 Vue.use(VueRouter)
-
-const routes = [
-  {
-    path: "/",
-    name:"login",
-    component: Login
-  },
-  {
-    path: "*",
-    name: "notfound",
-    component: NotFound
-  }
-]
 
 const router = new VueRouter({
     mode: "history",
     // base: process.env.BASE_URL,
     routes
+})
+
+router.beforeEach((to,from,next) => {
+  if(!store.state.token){
+    let token = window.sessionStorage.getItem("token")
+    if(token){
+      let items = getRoutes(store.state.user.codes)
+      let routers = getDynamicRoutes(items)
+      store.commit("SET_TOKEN",token)
+      store.commit("SET_MENULIST", items)
+      store.commit("SET_ROUTERS", routers)
+      router.addRoutes(routers)
+      next(to.path)
+    }
+  }
+  next()
 })
 
 export default router

@@ -1,23 +1,25 @@
 <template>
     <div>
         <el-menu
-            default-active="0"
             class="el-menu-vertical-demo"
+            :default-active="activeMenu"
+            :router="true"
+            @select="selectHandler"
             v-for="(v,i) in items" :key="i"
         >
-            <el-submenu :index="`${i}`" v-if="v.children && v.children.length">
+            <el-submenu :index="v.path" v-if="v.children && v.children.length">
                 <template slot="title">
                     <i :class="v.icon" v-if="v.icon"></i>
-                    <span>{{v.title}}</span>
+                    <span>{{v.name}}</span>
                 </template>
-                <el-menu-item :index="`${i-j}`" v-for="(c,j) in v.children" :key="j">
+                <el-menu-item :index="c.path" v-for="(c,j) in v.children" :key="j">
                     <i :class="c.icon" v-if="c.icon"></i>
-                    <span>{{c.title}}</span>
+                    <span>{{c.name}}</span>
                 </el-menu-item>
             </el-submenu>
-            <el-menu-item :index="`${i}`" v-else>
+            <el-menu-item :index="v.path" v-else>
                 <i :class="v.icon" v-if="v.icon"></i>
-                <span>{{v.title}}</span>
+                <span>{{v.name}}</span>
             </el-menu-item>
         </el-menu>
     </div>
@@ -25,7 +27,7 @@
 
 <script>
 
-  import {mapState} from "vuex"
+  import {mapState,mapMutations} from "vuex"
 
   export default {
     name: "index",
@@ -34,16 +36,18 @@
 
       }
     },
-    watch:{
-      $route(val,oldVal){
-        console.log(val)
-        console.log(oldVal)
-      }
+    methods:{
+      ...mapMutations({
+        selectHandler(commit,index) {
+          commit("SET_ACTIVEMENU", index)
+        }
+      }),
     },
     computed:{
       ...mapState({
-        items: state => state.layout.menuItems
-      })
+        items: state => state.layout.menuItems,
+        activeMenu: state => state.layout.activeMenu
+      }),
     }
   }
 </script>
