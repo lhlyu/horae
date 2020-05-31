@@ -2,6 +2,19 @@ import isMobile from  "ismobilejs"
 
 const defaultActive = "/admin/board"
 const defualtBreadcrumbItems = {to: "",name:"管理"}
+
+const eachBreadcrumbItems = (menuItems, currentIndex,cb) => {
+  for(let i = 0,length = menuItems.length;i < length ;i ++){
+    if(currentIndex.indexOf(menuItems[i].path) != -1){
+      cb(menuItems[i])
+    }
+    if(menuItems[i].children && menuItems[i].children.length){
+      eachBreadcrumbItems(menuItems[i].children,currentIndex,cb)
+    }
+  }
+}
+
+
 // vue 官方建议mutations，actions名字大写,全局唯一性
 // layout module
 export default {
@@ -25,10 +38,16 @@ export default {
       state.menuItems = val
     },
     SET_ACTIVEMENU(state,val){
-      let breadcrumbItems = [defualtBreadcrumbItems]
       if(!val || val == ""){
         val = defaultActive
       }
+      let breadcrumbItems = [defualtBreadcrumbItems]
+      eachBreadcrumbItems(state.menuItems,val,item => {
+        breadcrumbItems.push({
+          to: item.path,
+          name: item.name
+        })
+      })
       state.breadcrumbItems = breadcrumbItems
       state.activeMenu = val
     },

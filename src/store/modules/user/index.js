@@ -1,7 +1,7 @@
 // user module
 export default {
   state: {
-    codes: [10,11,12,1101,1102,1103]
+    codes: [10,12,1201,1202]
   },
   getters:{
 

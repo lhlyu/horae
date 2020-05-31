@@ -2,6 +2,8 @@ import Login from "@/views/login/index.vue"
 // 懒加载
 const NotFound = () => import("@/views/404.vue")
 const Index = () => import("@/views/index/index.vue")
+const UserPermission = () => import("@/views/permission/user.vue")
+const RolePermission = () => import("@/views/permission/role.vue")
 
 // 静态路由
 const routes = [{
@@ -23,34 +25,23 @@ const addRouters = [{
   icon: "el-icon-house",
   component: Index
 },{
-  code: 11,
-  path: "/admin/test",
-  redirect: "/admin/test/index1",
-  name: "AA",
-  icon: "el-icon-house",
-  component: Index,
-  children: [{
-    code: 1101,
-    path: "/admin/test/index1",
-    name: "AA1",
-    component: Index
-  },{
-    code: 1102,
-    path: "/admin/test/index2",
-    name: "AA2",
-    component: Index
-  },{
-    code: 1103,
-    path: "/admin/test/index3",
-    name: "AA3",
-    component: Index
-  }]
-},{
   code: 12,
-  path: "/admin/ceshi/asda/32r23",
-  name: "测试",
-  icon: "el-icon-house",
-  component: Index
+  path: "/admin/permission",
+  name: "权限",
+  icon: "el-icon-s-operation",
+  redirect: "/admin/permission/user",
+  component: UserPermission,
+  children:[{
+    code: 1201,
+    path: "/admin/permission/user",
+    name: "用户",
+    component: UserPermission
+  },{
+    code: 1202,
+    path: "/admin/permission/role",
+    name: "角色",
+    component: RolePermission
+  }]
 }]
 
 export {
