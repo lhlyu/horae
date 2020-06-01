@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-button @click="login">默认按钮</el-button>
+    <el-button @click="login" v-power="10">默认按钮</el-button>
   </div>
 </template>
 

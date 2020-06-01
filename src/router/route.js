@@ -1,5 +1,6 @@
 import Login from "@/views/login/index.vue"
 // 懒加载
+const Blank = () => import("@/layout/blank.vue")
 const NotFound = () => import("@/views/404.vue")
 const Index = () => import("@/views/index/index.vue")
 const UserPermission = () => import("@/views/permission/user.vue")
@@ -30,7 +31,7 @@ const addRouters = [{
   name: "权限",
   icon: "el-icon-s-operation",
   redirect: "/admin/permission/user",
-  component: UserPermission,
+  component: Blank,
   children:[{
     code: 1201,
     path: "/admin/permission/user",

@@ -54,7 +54,7 @@ export default {
   },
   actions: { // this.$store.dispatch
     SET_MENULIST ({commit}, val) {
-        commit("setMenuList", val)
+        commit("SET_MENULIST", val)
     }
   }
 }
