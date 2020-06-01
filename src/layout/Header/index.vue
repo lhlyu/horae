@@ -1,7 +1,7 @@
 <template>
     <div class="u-header">
         <div class="u-header__left">
-            <i class="el-icon-s-fold u-transition" :class="fold ? 'u-rotate-180':''" @click="triggerFold"></i>
+            <i class="el-icon-s-fold u-transition" :class="fold ? 'u-rotate-180':''"  @click="triggerFold"></i>
         </div>
         <div class="u-header__right">
 
