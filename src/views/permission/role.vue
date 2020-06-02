@@ -86,7 +86,6 @@
           </el-card>
       </el-row>
 
-
       <el-dialog
         :title="editReq.title"
         :append-to-body="true"
@@ -97,6 +96,13 @@
           </el-form-item>
           <el-form-item label="角色描述">
             <el-input v-model="editReq.remark" type="textarea" :rows="2"></el-input>
+          </el-form-item>
+          <el-form-item label="权限">
+            <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
+            <div style="margin: 15px 0;"></div>
+            <el-checkbox-group v-model="editReq.powers" @change="handleCheckedCitiesChange">
+              <el-checkbox v-for="power in powers" :label="power.id" :key="power.id">{{power.name}}</el-checkbox>
+            </el-checkbox-group>
           </el-form-item>
           <el-form-item label="是否启用">
             <el-switch
@@ -121,7 +127,7 @@
     import Time from "@/components/Time"
 
     export default {
-      name: "index",
+      name: "role",
       components:{
         Time
       },
@@ -138,9 +144,25 @@
             id: 0,
             name:"",
             remark:"",
+            powers: [],
             enable: 0
           },
           dialogVisible: false,
+          checkAll: false,
+          isIndeterminate: true,
+          powers:[{
+            id: 10,
+            name:"角色页面",
+          },{
+            id: 1010,
+            name:"角色添加",
+          },{
+            id: 1011,
+            name:"角色编辑",
+          },{
+            id: 1012,
+            name:"角色删除",
+          }],
           options: [{
             value: 0,
             label: "请选择角色"
@@ -180,6 +202,7 @@
               name: "管理者" + i,
               remark:"普通管理者" + i,
               enable: 0,
+              powers: [],
               createdAt: +new Date() - i * 10 * 36000,
               updatedAt: +new Date() - i *10 * 600
             }
@@ -193,6 +216,7 @@
             id: 0,
             name: "",
             remark: "",
+            powers: [10],
             enable: 0
           }
           this.dialogVisible = true
@@ -203,6 +227,7 @@
             id: row.id,
             name: row.name,
             remark: row.remark,
+            powers: row.powers,
             enable: row.enable
           }
           this.dialogVisible = true
@@ -223,6 +248,15 @@
               message: "已取消删除"
             });
           });
+        },
+        handleCheckAllChange(val) {
+          this.editReq.powers = val ? this.powers.map(({id}) => id) : [];
+          this.isIndeterminate = false;
+        },
+        handleCheckedCitiesChange(value) {
+          let checkedCount = value.length;
+          this.checkAll = checkedCount === this.editReq.powers.length;
+          this.isIndeterminate = checkedCount > 0 && checkedCount < this.powers.length;
         },
         edit(){
           this.$message({

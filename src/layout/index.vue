@@ -1,7 +1,7 @@
 <template>
     <el-container>
         <el-aside width="250px" class="u-transition" :class="fold ? 'u-fold':''"><ASide></ASide></el-aside>
-        <el-container>
+        <el-container  class="u-transition">
             <el-header><Header></Header></el-header>
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item v-for="(item,i) in breadcrumbItems" :key="i">{{item.name}}</el-breadcrumb-item>
@@ -74,5 +74,6 @@
   }
   .u-fold{
     width: 0px !important;
+    opacity: 0;
   }
 </style>
