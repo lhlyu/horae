@@ -20,6 +20,9 @@ const getDynamicRoutes = items => {
 }
 
 const getRoutes = codes => {
+  if(!codes.length){
+    return []
+  }
   function eachSelect (routers, codes) {
     for (let j = 0; j < routers.length; j++) {
       if (codes.indexOf(routers[j].code) == -1) {

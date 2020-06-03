@@ -56,6 +56,7 @@
     line-height: 40px;
     height: 40px;
     padding-left: 10px;
+    background: #ffffff;
   }
 
   .el-aside {

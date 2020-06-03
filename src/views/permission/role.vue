@@ -2,7 +2,7 @@
     <div class="u-container">
       <el-row :gutter="12">
           <el-card shadow="never">
-            <el-select v-model="req.value" size="mini" placeholder="请选择角色">
+            <el-select v-power="1202" v-model="req.value" size="mini" placeholder="请选择角色">
               <el-option
                 v-for="item in options"
                 :key="item.value"
@@ -10,7 +10,7 @@
                 :value="item.value">
               </el-option>
             </el-select>
-            <el-button type="primary" size="mini" plain @click="handleAdd">新增角色</el-button>
+            <el-button v-power="120201" type="primary" size="mini" plain @click="handleAdd">新增角色</el-button>
           </el-card>
           <el-card shadow="never">
             <el-table
@@ -60,11 +60,13 @@
                 align="right">
                 <template slot-scope="scope">
                   <el-button
+                    v-power="120202"
                     size="mini"
                     type="primary"
                     plain
                     @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
                   <el-button
+                    v-power="120203"
                     size="mini"
                     type="warning"
                     plain
