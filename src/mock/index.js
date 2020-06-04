@@ -1,4 +1,5 @@
 import user from "./user"
+import role from "./role"
 
 /**
  * 模拟数据mock
@@ -7,3 +8,4 @@ import user from "./user"
  */
 
 user({ mock: true })
+role({ mock: true })

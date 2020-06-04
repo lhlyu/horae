@@ -6,7 +6,7 @@
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item v-for="(item,i) in breadcrumbItems" :key="i">{{item.name}}</el-breadcrumb-item>
             </el-breadcrumb>
-            <el-main>
+            <el-main v-loading="isLoading">
                 <keep-alive>
                     <router-view></router-view>
                 </keep-alive>
@@ -36,7 +36,8 @@
     computed:{
       ...mapState({
         breadcrumbItems: state => state.layout.breadcrumbItems,
-        fold: state => state.layout.fold
+        fold: state => state.layout.fold,
+        isLoading: state => state.layout.isLoading,
       })
     }
   }

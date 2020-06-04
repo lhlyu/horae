@@ -22,7 +22,8 @@ export default {
     fold: isMobile().apple.phone,             // 是否是移动端
     breadcrumbItems:[defualtBreadcrumbItems], // 面包屑
     menuItems: [],                            // 菜单
-    activeMenu: defaultActive                 // 当前激活菜单
+    activeMenu: defaultActive,                // 当前激活菜单
+    isLoading: false,                         // 加载
   },
   getters:{
 
@@ -51,6 +52,10 @@ export default {
       state.breadcrumbItems = breadcrumbItems
       state.activeMenu = val
     },
+    SET_LOADING(state,val){
+      state.isLoading = val
+    }
+
   },
   actions: { // this.$store.dispatch
     SET_MENULIST ({commit}, val) {

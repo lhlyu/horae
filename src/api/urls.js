@@ -13,4 +13,5 @@ export default {
   RoleApi: S("/api/admin/roles"),
   EditRoleApi: S("/api/admin/role","post"),
   DelRoleApi: S("/api/admin/role","delete"),
+  PowerApi: S("/api/admin/powers","get")
 }
