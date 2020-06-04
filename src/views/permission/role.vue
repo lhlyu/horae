@@ -129,8 +129,6 @@
 
     import Time from "@/components/Time"
 
-    import {mapMutations} from "vuex"
-
     export default {
       name: "role",
       components:{
@@ -138,7 +136,7 @@
       },
       data() {
         return {
-          // 当前页码包含的权限值：访问 添加 删除 更新
+          // 当前页包含的权限值：访问 添加 删除 修改
           localPower:{
             view: 1202,
             add: 120201,
@@ -167,9 +165,12 @@
         }
       },
       methods: {
-        ...mapMutations(["SET_LOADING"]),
+        // 初始化
         init(){
-          this.SET_LOADING(true)
+          this.load()
+        },
+        // 加载数据
+        load(){
           let powers = this.$request.fetchPowers()
           let roles = this.$request.fetchRoles(this.req)
           powers.then(v => {
@@ -182,7 +183,6 @@
               this.req.pageSize = v.data.pageSize
               this.req.total = v.data.total
             }
-            this.SET_LOADING(false)
           })
         },
         handleAdd(){

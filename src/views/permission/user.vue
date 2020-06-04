@@ -2,20 +2,21 @@
   <div class="u-container">
     <el-row :gutter="12">
       <el-card shadow="never">
-        <el-select v-model="req.value" size="mini" placeholder="请选择角色">
-          <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
-        <el-button type="primary" size="mini" plain @click="handleAdd">新增角色</el-button>
+        <el-row>
+          <el-col :span="12">
+            <el-input v-power="localPower.view" placeholder="请输入内容" v-model="req.value" size="mini"></el-input>
+          </el-col>
+          <el-col :span="12">
+            <el-button v-power="localPower.view" type="primary" size="mini" plain @click="init">查询</el-button>
+            <el-button v-power="localPower.add" type="primary" size="mini" plain @click="handleAdd">新增角色</el-button>
+          </el-col>
+        </el-row>
+
       </el-card>
       <el-card shadow="never">
         <el-table
           size="mini"
-          :data="tableData"
+          :data="roles"
           stripe
           style="width: 100%">
           <el-table-column
@@ -60,15 +61,17 @@
             align="right">
             <template slot-scope="scope">
               <el-button
+                v-power="localPower.upd"
                 size="mini"
                 type="primary"
                 plain
                 @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
               <el-button
+                v-power="localPower.del"
                 size="mini"
                 type="warning"
                 plain
-                @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                @click="del(scope.$index, scope.row)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -126,6 +129,8 @@
 
   import Time from "@/components/Time"
 
+  import {mapMutations} from "vuex"
+
   export default {
     name: "user",
     components:{
@@ -133,11 +138,23 @@
     },
     data() {
       return {
+        // 当前页包含的权限值：访问 添加 删除 修改
+        localPower:{
+          view: 1201,
+          add: 120101,
+          del: 120102,
+          upd: 120103,
+        },
+        dialogVisible: false,
+        checkAll: false,
+        isIndeterminate: true,
+        powers:[],
+        roles: [],
         req:{
-          value: 0,
+          value: "",
           pageSize: 10,
           pageNum: 1,
-          total: 100
+          total: 0
         },
         editReq: {
           title: "编辑角色",
@@ -146,69 +163,27 @@
           remark:"",
           powers: [],
           enable: 0
-        },
-        dialogVisible: false,
-        checkAll: false,
-        isIndeterminate: true,
-        powers:[{
-          id: 10,
-          name:"角色页面",
-        },{
-          id: 1010,
-          name:"角色添加",
-        },{
-          id: 1011,
-          name:"角色编辑",
-        },{
-          id: 1012,
-          name:"角色删除",
-        }],
-        options: [{
-          value: 0,
-          label: "请选择角色"
-        },{
-          value: 1,
-          label: "管理者"
-        },{
-          value: 2,
-          label: "测试者"
-        }],
-        tableData: [{
-          id:1,
-          name: "管理者",
-          remark:"普通管理者",
-          enable: 0,
-          createdAt: +new Date(),
-          updatedAt: +new Date(),
-        },{
-          id:2,
-          name: "测试者",
-          remark:"测试系统",
-          enable: 0,
-          createdAt: +new Date(),
-          updatedAt: +new Date(),
-        }]
+        }
       }
     },
-    mounted() {
-      this.init()
-    },
     methods: {
+      ...mapMutations(["SET_LOADING"]),
       init(){
-        let items = []
-        for(let i = 1; i < 11;i ++){
-          let item = {
-            id:i,
-            name: "管理者" + i,
-            remark:"普通管理者" + i,
-            enable: 0,
-            powers: [],
-            createdAt: +new Date() - i * 10 * 36000,
-            updatedAt: +new Date() - i *10 * 600
+        this.SET_LOADING(true)
+        let powers = this.$request.fetchPowers()
+        let roles = this.$request.fetchRoles(this.req)
+        powers.then(v => {
+          this.powers = v.data
+        })
+        roles.then(v => {
+          if(!v.code){
+            this.roles = v.data.list
+            this.req.pageNum = v.data.pageNum
+            this.req.pageSize = v.data.pageSize
+            this.req.total = v.data.total
           }
-          items.push(item)
-        }
-        this.tableData = items
+          this.SET_LOADING(false)
+        })
       },
       handleAdd(){
         this.editReq = {
@@ -232,23 +207,6 @@
         }
         this.dialogVisible = true
       },
-      handleDelete(index, row) {
-        this.$confirm(`此操作将删除该角色『${row.name}』, 是否继续?`, "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(() => {
-          this.$message({
-            type: "success",
-            message: "删除成功!"
-          });
-        }).catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除"
-          });
-        });
-      },
       handleCheckAllChange(val) {
         this.editReq.powers = val ? this.powers.map(({id}) => id) : [];
         this.isIndeterminate = false;
@@ -258,13 +216,38 @@
         this.checkAll = checkedCount === this.editReq.powers.length;
         this.isIndeterminate = checkedCount > 0 && checkedCount < this.powers.length;
       },
+      del(index, row){
+        this.$confirm(`此操作将删除该角色『${row.name}』, 是否继续?`, "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        }).then(() => {
+          this.$request.fetchDelRole(this.editReq).then(v => {
+            if(!!v.code){
+              this.$message.warning("删除失败！")
+              return
+            }
+            this.$message.success("删除成功！")
+            this.init()
+          })
+        }).catch(() => {
+          this.$message.error("删除异常！")
+        })
+      },
       edit(){
-        this.$message({
-          showClose: true,
-          type: "success",
-          message: "修改完成"
-        });
-        this.dialogVisible = false
+        if(this.editReq.name.trim() === ""){
+          this.$message.warning("角色名字不能为空！")
+          return
+        }
+        let tip = this.editReq.id == 0 ? "新增" : "修改"
+        this.$request.fetchEditRole(this.editReq).then(v => {
+          if(!!v.code){
+            this.$message.warning(`${tip}失败！`)
+            return
+          }
+          this.$message.success(`${tip}成功！`)
+          this.init()
+        })
       }
     }
   }
