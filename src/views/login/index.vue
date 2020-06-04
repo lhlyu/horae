@@ -1,15 +1,22 @@
 <template>
-  <div>
+  <div class="u-login">
     <el-button @click="login">默认按钮</el-button>
+    <Plate></Plate>
   </div>
 </template>
 
 <script>
+
+  import Plate from "@/components/Plate"
+
   import {mapMutations} from "vuex"
   import {getRoutes,getDynamicRoutes} from "@/router/dynamic.js"
 
   export default {
     name: "index",
+    components:{
+      Plate
+    },
     methods:{
       ...mapMutations({
         login(commit) {
