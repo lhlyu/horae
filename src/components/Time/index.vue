@@ -1,5 +1,5 @@
 <template>
-    <span @click="handleClick">{{ date }}</span>
+  <span @click="handleClick">{{ date }}</span>
 </template>
 <script>
     import Time from './time';

@@ -4,11 +4,11 @@
           this is test text
         </div>
         <div class="u-plate__center">
-          <ul>
-            <li><span>Like</span></li>
-            <li><span>UnLike</span></li>
-            <li><span>Reply</span></li>
-          </ul>
+<!--          <ul>-->
+<!--            <li><span>Like</span></li>-->
+<!--            <li><span>UnLike</span></li>-->
+<!--            <li><span>Reply</span></li>-->
+<!--          </ul>-->
         </div>
         <div class="u-plate__right">
 
@@ -29,65 +29,63 @@
 <style lang="scss">
   .u-plate{
     position: relative;
-    height: 100px;
-    width: 70%;
+    height: 130px;
+    width: 800px;
     margin-top: 50px;
     display: flex;
     &__left{
       background: rgba(#ffffff,0.6);
-      width:400px;
-      height:100px;
-      position: relative;
+      height: 100%;
+      width: 550px;
       padding: 20px;
-      &:after{
-        content: '';
-        position: absolute;
-        right: -120px;
-        top: 0;
-        border-left: 60px solid rgba(#ffffff, 0.6);
-        border-right: 60px solid transparent;
-        border-bottom: 70px solid transparent;
-        border-top: 70px solid rgba(#ffffff, 0.6);
-      }
+      border-radius: 2px;
+      font-weight: bold;
+      letter-spacing: 3px;
+      clip-path: polygon(
+          0 0,
+          100% 0,
+          80% 100%,
+          0 100%
+      );
     }
     &__center{
-      background: transparent;
-      width: 120px;
-      height: 165px;
-      -webkit-transform: skew(-39deg);
-      transform: skew(-40deg);
-      margin-left: 67px;
+      width: 260px;
+      height: 114%;
+      background: rgba(#fff000,0.6);
+      margin-left: -110px;
       margin-top: -10px;
-      ul{
-        list-style-type: none;
-        li{
-          line-height: 50px;
-          text-align: center;
-          &:nth-child(1){
-            background: rgba(#ff0000, 0.6);
-            width: 120px;
-            height: 50px;
-            transform: skew(0deg);
-          }
-          &:nth-child(2){
-            background: rgba(#ff00ff, 0.6);
-            width: 120px;
-            height: 50px;
-            transform: skew(0deg);
-            margin-top: 7px;
-          }
-          &:nth-child(3){
-            background: rgba(#0000ff, 0.6);
-            width: 120px;
-            height: 50px;
-            margin-top: 7px;
-            transform: skew(0deg);
-          }
-          span{
-            letter-spacing: 4px;
-          }
-        }
-      }
+
+      clip-path: polygon(
+          20% 0,
+          100% 0,
+          80% 100%,
+          0 100%
+      );
+
+      /*ul{*/
+      /*  height: 100%;*/
+      /*  list-style-type: none;*/
+      /*  li{*/
+      /*    height: 35%;*/
+      /*    text-align: center;*/
+      /*    clip-path: polygon(*/
+      /*        20% 0,*/
+      /*        100% 0,*/
+      /*        80% 100%,*/
+      /*        0 100%*/
+      /*    );*/
+
+      /*    &:nth-child(1){*/
+      /*      background: rgba(#ff0000, 0.6);*/
+      /*    }*/
+      /*    &:nth-child(2){*/
+      /*      background: rgba(#ff00ff, 0.6);*/
+      /*    }*/
+      /*    &:nth-child(3){*/
+      /*      background: rgba(#0000ff, 0.6);*/
+      /*    }*/
+      /*  }*/
+      /*}*/
     }
   }
 </style>

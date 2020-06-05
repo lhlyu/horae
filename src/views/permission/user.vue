@@ -11,7 +11,6 @@
             <el-button v-power="localPower.add" type="primary" size="mini" plain @click="handleAdd">新增角色</el-button>
           </el-col>
         </el-row>
-
       </el-card>
       <el-card shadow="never">
         <el-table
@@ -121,62 +120,61 @@
           <el-button type="warning" size="mini" plain @click="edit">确 定</el-button>
         </span>
     </el-dialog>
-
   </div>
 </template>
 
 <script>
 
-  import Time from "@/components/Time"
+  import Time from '@/components/Time'
 
-  import {mapMutations} from "vuex"
+  import { mapMutations } from 'vuex'
 
   export default {
-    name: "user",
-    components:{
+    name: 'user',
+    components: {
       Time
     },
-    data() {
+    data () {
       return {
         // 当前页包含的权限值：访问 添加 删除 修改
-        localPower:{
+        localPower: {
           view: 1201,
           add: 120101,
           del: 120102,
-          upd: 120103,
+          upd: 120103
         },
         dialogVisible: false,
         checkAll: false,
         isIndeterminate: true,
-        powers:[],
+        powers: [],
         roles: [],
-        req:{
-          value: "",
+        req: {
+          value: '',
           pageSize: 10,
           pageNum: 1,
           total: 0
         },
         editReq: {
-          title: "编辑角色",
+          title: '编辑角色',
           id: 0,
-          name:"",
-          remark:"",
+          name: '',
+          remark: '',
           powers: [],
           enable: 0
         }
       }
     },
     methods: {
-      ...mapMutations(["SET_LOADING"]),
-      init(){
+      ...mapMutations(['SET_LOADING']),
+      init () {
         this.SET_LOADING(true)
-        let powers = this.$request.fetchPowers()
-        let roles = this.$request.fetchRoles(this.req)
+        const powers = this.$request.fetchPowers()
+        const roles = this.$request.fetchRoles(this.req)
         powers.then(v => {
           this.powers = v.data
         })
         roles.then(v => {
-          if(!v.code){
+          if (!v.code) {
             this.roles = v.data.list
             this.req.pageNum = v.data.pageNum
             this.req.pageSize = v.data.pageSize
@@ -185,20 +183,20 @@
           this.SET_LOADING(false)
         })
       },
-      handleAdd(){
+      handleAdd () {
         this.editReq = {
-          title: "添加角色",
+          title: '添加角色',
           id: 0,
-          name: "",
-          remark: "",
+          name: '',
+          remark: '',
           powers: [10],
           enable: 0
         }
         this.dialogVisible = true
       },
-      handleEdit(index, row) {
+      handleEdit (index, row) {
         this.editReq = {
-          title: "编辑角色",
+          title: '编辑角色',
           id: row.id,
           name: row.name,
           remark: row.remark,
@@ -207,41 +205,41 @@
         }
         this.dialogVisible = true
       },
-      handleCheckAllChange(val) {
-        this.editReq.powers = val ? this.powers.map(({id}) => id) : [];
-        this.isIndeterminate = false;
+      handleCheckAllChange (val) {
+        this.editReq.powers = val ? this.powers.map(({ id }) => id) : []
+        this.isIndeterminate = false
       },
-      handleCheckedCitiesChange(value) {
-        let checkedCount = value.length;
-        this.checkAll = checkedCount === this.editReq.powers.length;
-        this.isIndeterminate = checkedCount > 0 && checkedCount < this.powers.length;
+      handleCheckedCitiesChange (value) {
+        const checkedCount = value.length
+        this.checkAll = checkedCount === this.editReq.powers.length
+        this.isIndeterminate = checkedCount > 0 && checkedCount < this.powers.length
       },
-      del(index, row){
-        this.$confirm(`此操作将删除该角色『${row.name}』, 是否继续?`, "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
+      del (index, row) {
+        this.$confirm(`此操作将删除该角色『${row.name}』, 是否继续?`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
         }).then(() => {
           this.$request.fetchDelRole(this.editReq).then(v => {
-            if(!!v.code){
-              this.$message.warning("删除失败！")
+            if (v.code) {
+              this.$message.warning('删除失败！')
               return
             }
-            this.$message.success("删除成功！")
+            this.$message.success('删除成功！')
             this.init()
           })
         }).catch(() => {
-          this.$message.error("删除异常！")
+          this.$message.error('删除异常！')
         })
       },
-      edit(){
-        if(this.editReq.name.trim() === ""){
-          this.$message.warning("角色名字不能为空！")
+      edit () {
+        if (this.editReq.name.trim() === '') {
+          this.$message.warning('角色名字不能为空！')
           return
         }
-        let tip = this.editReq.id == 0 ? "新增" : "修改"
+        const tip = this.editReq.id === 0 ? '新增' : '修改'
         this.$request.fetchEditRole(this.editReq).then(v => {
-          if(!!v.code){
+          if (v.code) {
             this.$message.warning(`${tip}失败！`)
             return
           }

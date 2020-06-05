@@ -1,9 +1,9 @@
-import axios from "./axios"
-import api from "./urls"
+import axios from './axios'
+import api from './urls'
 
-const baseUrl = ""
+const baseUrl = ''
 
-const fetch = (url,method = "get",data = null) => {
+const fetch = (url, method = 'get', data = null) => {
   return axios.request({
     url: url,
     method: method,
@@ -13,19 +13,19 @@ const fetch = (url,method = "get",data = null) => {
 }
 
 export default {
-  fetchLogin(){
-    return fetch(api.LoginApi.u,api.LoginApi.m)
+  fetchLogin () {
+    return fetch(api.LoginApi.u, api.LoginApi.m)
   },
-  fetchRoles(data){
-    return fetch(api.RoleApi.u,api.RoleApi.m,data)
+  fetchRoles (data) {
+    return fetch(api.RoleApi.u, api.RoleApi.m, data)
   },
-  fetchEditRole(data){
-    return fetch(api.EditRoleApi.u,api.EditRoleApi.m,data)
+  fetchEditRole (data) {
+    return fetch(api.EditRoleApi.u, api.EditRoleApi.m, data)
   },
-  fetchDelRole(data){
-    return fetch(api.DelRoleApi.u,api.DelRoleApi.m,data)
+  fetchDelRole (data) {
+    return fetch(api.DelRoleApi.u, api.DelRoleApi.m, data)
   },
-  fetchPowers(){
-    return fetch(api.PowerApi.u,api.PowerApi.m)
-  },
+  fetchPowers () {
+    return fetch(api.PowerApi.u, api.PowerApi.m)
+  }
 }

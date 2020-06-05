@@ -1,36 +1,36 @@
-import Vue from "vue";
-import isMobile from "ismobilejs"
-import $request from "@/api/apis.js"
+import Vue from 'vue'
+import isMobile from 'ismobilejs'
+import $request from '@/api/apis.js'
 
 Vue.prototype.$isMobile = isMobile().phone
 Vue.prototype.$request = $request
 
 Vue.mixin({
-  components:{
+  components: {
   },
-  data(){
-      return {
+  data () {
+    return {
 
-      }
+    }
   },
-  mounted() {
+  mounted () {
     this.$nextTick(() => {
       this.initData()
       this.init()
     })
   },
-  methods:{
-    initData(){},
-    init(){},
-    scrollTop(cb,top){
+  methods: {
+    initData () {},
+    init () {},
+    scrollTop (cb, top) {
       window.scrollTo({
         top: top || 0,
-        behavior: "smooth"
+        behavior: 'smooth'
       })
-      if(cb){
+      if (cb) {
         setTimeout(() => {
           cb()
-        },this.$isMobile ? 0 : 400)
+        }, this.$isMobile ? 0 : 400)
       }
     }
   }

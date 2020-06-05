@@ -3,11 +3,11 @@
 </template>
 
 <script>
-    export default {
-        name: "notfound",
-        data() {
-            return {}
-        },
-        methods: {}
-    }
+  export default {
+    name: 'notfound',
+    data () {
+      return {}
+    },
+    methods: {}
+  }
 </script>
