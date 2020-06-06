@@ -94,7 +94,7 @@ export const ua = navigator.userAgent.toLowerCase()
 
 // 是否是微信浏览器
 export const isWeiXin = () => {
-  return ua.match(/microMessenger/i) == 'micromessenger'
+  return ua.match(/microMessenger/i) === 'micromessenger'
 }
 
 // 是否是移动端
@@ -264,7 +264,7 @@ export const copyTextToClipboard = (value) => {
   document.body.appendChild(textArea)
   textArea.select()
   try {
-    var successful = document.execCommand('copy')
+    document.execCommand('copy')
   } catch (err) {
     console.log('Oops, unable to copy')
   }
@@ -329,7 +329,7 @@ export const isCardID = (sId) => {
   // 出生日期验证
   var sBirthday = (sId.substr(6, 4) + '-' + Number(sId.substr(10, 2)) + '-' + Number(sId.substr(12, 2))).replace(/-/g, '/')
   var d = new Date(sBirthday)
-  if (sBirthday != (d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + d.getDate())) {
+  if (sBirthday !== (d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + d.getDate())) {
     console.log('身份证上的出生日期非法')
     return false
   }
@@ -342,7 +342,7 @@ export const isCardID = (sId) => {
     sum += sId[i] * weights[i]
   }
   var last = codes[sum % 11] // 计算出来的最后一位身份证号码
-  if (sId[sId.length - 1] != last) {
+  if (sId[sId.length - 1] !== last) {
     console.log('你输入的身份证号非法')
     return false
   }
