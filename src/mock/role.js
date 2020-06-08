@@ -16,7 +16,7 @@ export default ({ mock }) => {
         'id|+1': 1,
         name: '管理者' + i,
         remark: Mock.Random.cname(),
-        enable: 0,
+        enable: Mock.Random.natural(0, 1),
         powers: [10, 12, 1201, 1202, 120201, 120202],
         createdAt: Mock.Random.natural(1582969294016, 1589017294016),
         updatedAt: Mock.Random.natural(1589017294016, 1591609294016)

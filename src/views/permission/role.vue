@@ -1,17 +1,29 @@
 <template>
   <div class="u-container">
     <el-row :gutter="12">
-      <!-- 数据表格 start -->
       <el-card shadow="never">
-
         <el-row>
           <el-col :span="5">
             <el-input v-power="localPower.view" placeholder="请输入内容" v-model="req.value" size="mini"></el-input>
           </el-col>
           <el-col :span="19">
             <el-button v-power="localPower.view" type="primary" size="mini" plain @click="load">查询</el-button>
-            <el-button v-power="localPower.add" type="primary" size="mini" plain @click="handleAdd">新增角色</el-button>
-            <el-button v-if="delReq.ids && delReq.ids.length" v-power="localPower.del" v-throttling="DelThrottling" type="warning" size="mini" plain>删除选中角色</el-button>
+          </el-col>
+        </el-row>
+      </el-card>
+
+      <!-- 数据表格 start -->
+      <el-card shadow="never">
+
+        <el-row>
+          <el-col :span="24">
+            <el-button v-power="localPower.add" type="primary" size="mini" icon="el-icon-plus" plain @click="handleAdd">新增</el-button>
+            <el-button v-throttling="refreshThrottling" type="success" size="mini" icon="el-icon-refresh" plain>
+              刷新
+            </el-button>
+            <el-button :disabled="delReq.ids.length == 0" v-power="localPower.del" icon="el-icon-delete" v-throttling="delThrottling" type="warning" size="mini" plain>
+              删除{{delReq.ids.length == 0 ? '' : ' * ' + delReq.ids.length}}
+            </el-button>
           </el-col>
         </el-row>
         <br>
@@ -25,7 +37,7 @@
           <el-table-column
             fixed="left"
             type="selection"
-            width="40">
+            width="50">
           </el-table-column>
           <el-table-column
             align="center"
@@ -47,8 +59,8 @@
             width="120"
             label="是否启用">
             <template slot-scope="scope">
-              <span v-if="scope.row.enable === 0">启用</span>
-              <span v-else>未启用</span>
+              <span v-if="scope.row.enable === 0"><el-tag effect="dark" size="mini">启用</el-tag></span>
+              <span v-else><el-tag effect="dark" size="mini" type="info">禁用</el-tag></span>
             </template>
           </el-table-column>
           <el-table-column
@@ -110,6 +122,7 @@
 
     <!-- 弹出层 start -->
     <el-dialog
+      @close="handlerClose"
       :title="editReq.title"
       :append-to-body="true"
       :visible.sync="dialogVisible">
@@ -118,11 +131,12 @@
           <el-form label-position="top" label-width="80px"size="mini">
             <el-form-item label="权限树">
               <el-tree
+                ref="tree"
                 :data="powerTree"
                 show-checkbox
                 node-key="id"
-                :default-expanded-keys="editReq.powers"
                 :default-checked-keys="editReq.powers"
+                :default-expanded-keys="editReq.powers"
                 :props="treeProps">
               </el-tree>
             </el-form-item>
@@ -142,7 +156,7 @@
                 v-model="editReq.enable"
                 :active-value="0"
                 active-text="启用"
-                inactive-text="不启用">
+                inactive-text="禁用">
               </el-switch>
             </el-form-item>
           </el-form>
@@ -151,7 +165,7 @@
 
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" size="mini" plain @click="dialogVisible = false">取 消</el-button>
-        <el-button type="warning" size="mini" plain v-throttling="EditThrottling">确 定</el-button>
+        <el-button type="warning" size="mini" plain v-throttling="editThrottling">确 定</el-button>
       </span>
     </el-dialog>
     <!-- 弹出层 end -->
@@ -202,12 +216,19 @@
           enable: 0
         },
         // 节流
-        EditThrottling:{
+        editThrottling:{
           callback : this.edit,
           time: 2000
         },
-        DelThrottling:{
+        delThrottling:{
           callback : this.delSelection,
+          time: 2000
+        },
+        refreshThrottling:{
+          callback: () => {
+            this.initData()
+            this.init()
+          },
           time: 2000
         }
       }
@@ -226,7 +247,6 @@
       },
       // 加载数据
       load () {
-        console.log(this.req)
         const roles = this.$request.fetchRoles(this.req)
         roles.then(v => {
           if (!v.code) {
@@ -241,6 +261,9 @@
         this.req.pageSize = val
         this.load()
       },
+      handlerClose(){
+        this.$refs.tree.setCheckedKeys([]);
+      },
       handleAdd () {
         this.editReq = {
           title: '添加角色',
@@ -250,6 +273,7 @@
           powers: [],
           enable: 0
         }
+        console.log("editReq:",this.editReq)
         this.dialogVisible = true
       },
       handleEdit (index, row) {
