@@ -2,6 +2,7 @@
 import Vue from 'vue'
 import store from '@/store'
 import { contains } from '@/utils'
+import {Message} from "element-ui";
 
 // 参考: https://cn.vuejs.org/v2/guide/custom-directive.html
 
@@ -31,6 +32,8 @@ Vue.directive('throttling', {
       if (!el.preTime || nowTime - el.preTime > el.time) {
         el.preTime = nowTime
         el.callback()
+      }else{
+        Message.warning("请求太频繁，休息一下~")
       }
     })
   },

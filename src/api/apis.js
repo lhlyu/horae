@@ -25,7 +25,13 @@ export default {
   fetchDelRole (data) {
     return fetch(api.DelRoleApi.u, api.DelRoleApi.m, data)
   },
+  fetchDelRoles (data) {
+    return fetch(api.DelRolesApi.u, api.DelRolesApi.m, data)
+  },
   fetchPowers () {
     return fetch(api.PowerApi.u, api.PowerApi.m)
+  },
+  fetchPowerTree () {
+    return fetch(api.PowerTreeApi.u, api.PowerTreeApi.m)
   }
 }

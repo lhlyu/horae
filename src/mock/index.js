@@ -7,5 +7,7 @@ import role from './role'
  * mock是否开启模拟数据拦截
  */
 
-user({ mock: true })
-role({ mock: true })
+const enable = true
+
+user({ mock: enable })
+role({ mock: enable })

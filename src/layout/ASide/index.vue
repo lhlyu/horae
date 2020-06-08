@@ -51,3 +51,9 @@
     }
   }
 </script>
+<style lang="scss">
+  .el-menu{
+    border-right: 0;
+    background: transparent;
+  }
+</style>

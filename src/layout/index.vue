@@ -1,12 +1,12 @@
 <template>
     <el-container>
         <el-aside width="250px" class="u-transition" :class="fold ? 'u-fold':''"><ASide></ASide></el-aside>
-        <el-container  class="u-transition">
+        <el-container  class="u-transition"  v-loading="isLoading">
             <el-header><Header></Header></el-header>
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item v-for="(item,i) in breadcrumbItems" :key="i">{{item.name}}</el-breadcrumb-item>
             </el-breadcrumb>
-            <el-main v-loading="isLoading">
+            <el-main>
                 <keep-alive>
                     <router-view></router-view>
                 </keep-alive>
@@ -47,23 +47,32 @@
     height: 100%;
   }
   .el-header, .el-footer {
-    background-color: #B3C0D1;
+    background-color: white;
     color: #333;
     text-align: center;
     line-height: 60px;
   }
+  .el-header{
+    border-bottom: solid 1px #e6e6e6;
+  }
+  .el-footer{
+    border-top: solid 1px #e6e6e6;
+  }
+
   .el-breadcrumb {
     font-size: 14px;
     line-height: 40px;
     height: 40px;
     padding-left: 10px;
     background: #ffffff;
+    border-bottom: solid 1px #e6e6e6;
   }
 
   .el-aside {
-    background-color: #D3DCE6;
+    background-color: #ffffff;
     color: #333;
     overflow-x: hidden;
+    border-right: solid 1px #e6e6e6;
   }
 
   .el-main {

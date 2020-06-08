@@ -1,6 +1,6 @@
 <template>
   <div class="u-login">
-    <el-button @click="login">默认按钮</el-button>
+    <el-button v-throttling="loginThrottling">默认按钮</el-button>
     <Plate></Plate>
   </div>
 </template>
@@ -16,6 +16,14 @@
     name: 'index',
     components: {
       Plate
+    },
+    data(){
+      return {
+        loginThrottling:{
+          callback: this.login,
+          time: 2000
+        }
+      }
     },
     methods: {
       ...mapMutations({
