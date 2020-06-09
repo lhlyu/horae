@@ -30,9 +30,9 @@ jobs:
       # 3. 部署
       - name: Deploy
         # 用第三方库
-        uses: JamesIves/github-pages-deploy-action@releases/v3
+        uses: JamesIves/github-pages-deploy-action@master
         env: 
-          ACCESS_TOKEN: ${{ secrets.HORAE_ACTIONS_TOKEN }}
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           BRANCH: gh-pages
           FOLDER: dist
           BUILD_SCRIPT: npm install && npm run build 
