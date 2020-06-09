@@ -1,9 +1,11 @@
 import Vue from 'vue'
 import isMobile from 'ismobilejs'
-import $request from '@/api/apis.js'
+import request from '@/api/apis.js'
+import codes from '@/config/codes.js'
 
 Vue.prototype.$isMobile = isMobile().phone
-Vue.prototype.$request = $request
+Vue.prototype.$request = request
+Vue.prototype.$codes = codes
 
 Vue.mixin({
   components: {

@@ -11,11 +11,11 @@ export default {
   // 用户
   UsersApi: S('/api/admin/users'),
   // 用户详情
-  UserApi: S("/api/admin/user"),
+  UserApi: S('/api/admin/user'),
   // 编辑用户
-  EditUser: S("/api/admin/user","post"),
+  EditUser: S('/api/admin/user', 'post'),
   // 删除用户
-  DelUser: S("/api/admin/user","delete"),
+  DelUser: S('/api/admin/user', 'delete'),
 
   // 角色
   RolesApi: S('/api/admin/roles'),

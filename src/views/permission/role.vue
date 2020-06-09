@@ -4,10 +4,10 @@
       <el-card shadow="never">
         <el-row>
           <el-col :span="12">
-            <el-input v-power="localPower.view" placeholder="请输入内容" v-model="req.value" size="mini"></el-input>
+            <el-input v-power="$codes.role.view" placeholder="请输入内容" v-model="req.value" size="mini"></el-input>
           </el-col>
           <el-col :span="12">
-            <el-button v-power="localPower.view" type="primary" size="mini" plain @click="load">查询</el-button>
+            <el-button v-power="$codes.role.view" type="primary" size="mini" plain @click="load">查询</el-button>
           </el-col>
         </el-row>
       </el-card>
@@ -16,8 +16,8 @@
 
         <el-row justify="space-between">
           <el-col>
-            <el-button v-power="localPower.add" type="primary" size="mini" icon="el-icon-plus" plain @click="handleAdd">新增</el-button>
-            <el-button :disabled="delReq.ids.length == 0" v-power="localPower.del" icon="el-icon-delete" v-throttling="delThrottling" type="warning" size="mini" plain>
+            <el-button v-power="$codes.role.add" type="primary" size="mini" icon="el-icon-plus" plain @click="handleAdd">新增</el-button>
+            <el-button :disabled="delReq.ids.length == 0" v-power="$codes.role.del" icon="el-icon-delete" v-throttling="delThrottling" type="warning" size="mini" plain>
               删除{{delReq.ids.length == 0 ? '' : ' * ' + delReq.ids.length}}
             </el-button>
             <div class="u-float-right">
@@ -28,6 +28,7 @@
                 placement="bottom"
                 trigger="click">
                 <el-checkbox v-model="tabCol.seq">序号</el-checkbox><br>
+                <el-checkbox v-model="tabCol.id">ID</el-checkbox><br>
                 <el-checkbox v-model="tabCol.name">名字</el-checkbox><br>
                 <el-checkbox v-model="tabCol.remark">备注</el-checkbox><br>
                 <el-checkbox v-model="tabCol.enable">是否启用</el-checkbox><br>
@@ -50,7 +51,7 @@
           header-cell-class-name="u-transition"
           style="width: 100%"
           @selection-change="handleSelectionChange"
-          :data="roles">
+          :data="items">
           <el-table-column
             fixed="left"
             type="selection"
@@ -61,6 +62,12 @@
             align="center"
             label="序号"
             type="index">
+          </el-table-column>
+          <el-table-column
+            v-if="tabCol.id"
+            align="center"
+            label="ID"
+            prop="id">
           </el-table-column>
           <el-table-column
             v-if="tabCol.name"
@@ -109,19 +116,19 @@
             align="center">
             <template slot-scope="scope">
               <el-button
-                v-power="localPower.view"
+                v-power="$codes.role.view"
                 size="mini"
                 type="text"
                 icon="el-icon-view"
                 @click="handleView(scope.$index, scope.row)">查看</el-button>
               <el-button
-                v-power="localPower.upd"
+                v-power="$codes.role.upd"
                 size="mini"
                 type="text"
                 icon="el-icon-edit"
                 @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
               <el-button
-                v-power="localPower.del"
+                v-power="$codes.role.del"
                 size="mini"
                 type="text"
                 icon="el-icon-delete"
@@ -209,19 +216,13 @@
     },
     data () {
       return {
-        // 当前页包含的权限值：访问 添加 删除 修改
-        localPower: {
-          view: 1202,
-          add: 120201,
-          del: 120202,
-          upd: 120203
-        },
         treeProps: {
           children: 'children',
           label: 'name'
         },
         tabCol: {
           seq: true,
+          id: true,
           name: true,
           remark: true,
           enable: true,
@@ -229,10 +230,9 @@
           updatedAt: true
         },
         dialogVisible: false,
-        checkAll: false,
         isIndeterminate: true,
         powerTree: [],
-        roles: [],
+        items: [],
         delReq: {
           ids: []
         },
@@ -283,10 +283,10 @@
       },
       // 加载数据
       load () {
-        const roles = this.$request.fetchRoles(this.req)
-        roles.then(v => {
+        const resp = this.$request.fetchRoles(this.req)
+        resp.then(v => {
           if (!v.code) {
-            this.roles = v.data.list
+            this.items = v.data.list
             this.req.pageNum = v.data.page.pageNum
             this.req.pageSize = v.data.page.pageSize
             this.req.total = v.data.page.total
@@ -367,8 +367,6 @@
             this.$message.success('删除成功！')
             this.load()
           })
-        }).catch(() => {
-          this.$message.error('删除异常！')
         })
       },
       delSelection () {
@@ -386,8 +384,6 @@
             this.delReq.ids = []
             this.load()
           })
-        }).catch(() => {
-          this.$message.error('删除异常！')
         })
       },
       edit () {

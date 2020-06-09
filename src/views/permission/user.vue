@@ -4,10 +4,10 @@
       <el-card shadow="never">
         <el-row>
           <el-col :span="12">
-            <el-input v-power="localPower.view" placeholder="请输入内容" v-model="req.value" size="mini"></el-input>
+            <el-input v-power="$codes.user.view" placeholder="请输入内容" v-model="req.value" size="mini"></el-input>
           </el-col>
           <el-col :span="12">
-            <el-button v-power="localPower.view" type="primary" size="mini" plain @click="load">查询</el-button>
+            <el-button v-power="$codes.user.view" type="primary" size="mini" plain @click="load">查询</el-button>
           </el-col>
         </el-row>
       </el-card>
@@ -16,12 +16,12 @@
 
         <el-row justify="space-between">
           <el-col>
-            <el-button v-power="localPower.add" type="primary" size="mini" icon="el-icon-plus" plain @click="handleAdd">新增</el-button>
-            <el-button :disabled="delReq.ids.length == 0" v-power="localPower.del" icon="el-icon-delete" v-throttling="delThrottling" type="warning" size="mini" plain>
+            <el-button v-power="$codes.user.add" type="primary" size="mini" icon="el-icon-plus" plain @click="handleAdd">新增</el-button>
+            <el-button :disabled="delReq.ids.length == 0" v-power="$codes.user.del" icon="el-icon-delete" v-throttling="delThrottling" type="warning" size="mini" plain>
               删除{{delReq.ids.length == 0 ? '' : ' * ' + delReq.ids.length}}
             </el-button>
-            <el-button :disabled="delReq.ids.length == 0" v-power="localPower.upd" icon="el-icon-refresh-left" v-throttling="delThrottling" type="warning" size="mini" plain>
-              重置{{delReq.ids.length == 0 ? '' : ' * ' + delReq.ids.length}}
+            <el-button :disabled="delReq.ids.length == 0" v-power="$codes.user.upd" icon="el-icon-refresh-left" v-throttling="delThrottling" type="info" size="mini" plain>
+              重置密码{{delReq.ids.length == 0 ? '' : ' * ' + delReq.ids.length}}
             </el-button>
             <div class="u-float-right">
               <el-button v-throttling="refreshThrottling" type="info" size="mini" icon="el-icon-refresh" circle plain>
@@ -31,9 +31,18 @@
                 placement="bottom"
                 trigger="click">
                 <el-checkbox v-model="tabCol.seq">序号</el-checkbox><br>
-                <el-checkbox v-model="tabCol.name">名字</el-checkbox><br>
-                <el-checkbox v-model="tabCol.remark">备注</el-checkbox><br>
-                <el-checkbox v-model="tabCol.enable">是否启用</el-checkbox><br>
+                <el-checkbox v-model="tabCol.id">ID</el-checkbox><br>
+                <el-checkbox v-model="tabCol.thirdId">第三方ID</el-checkbox><br>
+                <el-checkbox v-model="tabCol.account">账号</el-checkbox><br>
+                <el-checkbox v-model="tabCol.nickName">昵称</el-checkbox><br>
+                <el-checkbox v-model="tabCol.role.name">角色</el-checkbox><br>
+                <el-checkbox v-model="tabCol.avatar">头像</el-checkbox><br>
+                <el-checkbox v-model="tabCol.source">来源</el-checkbox><br>
+                <el-checkbox v-model="tabCol.url">地址</el-checkbox><br>
+                <el-checkbox v-model="tabCol.bio">签名</el-checkbox><br>
+                <el-checkbox v-model="tabCol.state">状态</el-checkbox><br>
+                <el-checkbox v-model="tabCol.lastIp">最后登陆IP</el-checkbox><br>
+                <el-checkbox v-model="tabCol.lastAt">最后登陆时间</el-checkbox><br>
                 <el-checkbox v-model="tabCol.createdAt">创建时间</el-checkbox><br>
                 <el-checkbox v-model="tabCol.updatedAt">更新时间</el-checkbox>
                 <el-button slot="reference" type="info" size="mini" icon="el-icon-s-operation" circle plain>
@@ -53,7 +62,7 @@
           header-cell-class-name="u-transition"
           style="width: 100%"
           @selection-change="handleSelectionChange"
-          :data="roles">
+          :data="items">
           <el-table-column
             fixed="left"
             type="selection"
@@ -66,26 +75,76 @@
             type="index">
           </el-table-column>
           <el-table-column
-            v-if="tabCol.name"
+            v-if="tabCol.id"
             align="center"
-            label="名字"
-            prop="name">
+            label="ID"
+            prop="id">
           </el-table-column>
           <el-table-column
-            v-if="tabCol.remark"
+            v-if="tabCol.thirdId"
             align="center"
-            label="备注"
-            prop="remark">
+            label="第三方ID"
+            prop="thirdId">
           </el-table-column>
           <el-table-column
-            v-if="tabCol.enable"
+            v-if="tabCol.account"
             align="center"
-            width="120"
-            label="是否启用">
-            <template slot-scope="scope">
-              <span v-if="scope.row.enable === 0"><el-tag effect="light" size="mini">启用</el-tag></span>
-              <span v-else><el-tag effect="light" size="mini" type="info">禁用</el-tag></span>
-            </template>
+            label="账号"
+            prop="account">
+          </el-table-column>
+          <el-table-column
+            v-if="tabCol.nickName"
+            align="center"
+            label="昵称"
+            prop="nickName">
+          </el-table-column>
+          <el-table-column
+            v-if="tabCol.role.name"
+            align="center"
+            label="角色"
+            prop="role.name">
+          </el-table-column>
+          <el-table-column
+            v-if="tabCol.avatar"
+            align="center"
+            label="头像"
+            prop="avatar">
+          </el-table-column>
+          <el-table-column
+            v-if="tabCol.source"
+            align="center"
+            label="来源"
+            prop="source">
+          </el-table-column>
+          <el-table-column
+            v-if="tabCol.url"
+            align="center"
+            label="地址"
+            prop="url">
+          </el-table-column>
+          <el-table-column
+            v-if="tabCol.bio"
+            align="center"
+            label="签名"
+            prop="bio">
+          </el-table-column>
+          <el-table-column
+            v-if="tabCol.state"
+            align="center"
+            label="状态"
+            prop="state">
+          </el-table-column>
+          <el-table-column
+            v-if="tabCol.lastIp"
+            align="center"
+            label="最后登陆IP"
+            prop="lastIp">
+          </el-table-column>
+          <el-table-column
+            v-if="tabCol.lastAt"
+            align="center"
+            label="最后登陆时间"
+            prop="lastAt">
           </el-table-column>
           <el-table-column
             v-if="tabCol.createdAt"
@@ -112,19 +171,19 @@
             align="center">
             <template slot-scope="scope">
               <el-button
-                v-power="localPower.view"
+                v-power="$codes.user.view"
                 size="mini"
                 type="text"
                 icon="el-icon-view"
                 @click="handleView(scope.$index, scope.row)">查看</el-button>
               <el-button
-                v-power="localPower.upd"
+                v-power="$codes.user.upd"
                 size="mini"
                 type="text"
                 icon="el-icon-edit"
                 @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
               <el-button
-                v-power="localPower.del"
+                v-power="$codes.user.del"
                 size="mini"
                 type="text"
                 icon="el-icon-delete"
@@ -157,7 +216,22 @@
       :append-to-body="true"
       :visible.sync="dialogVisible">
       <el-row :gutter="10">
-        <el-col :span="24">
+        <el-col :span="8">
+          <el-form label-position="top" label-width="80px"size="mini" :disabled="editReq.viewMode">
+            <el-form-item label="权限树">
+              <el-tree
+                ref="tree"
+                :data="powerTree"
+                show-checkbox
+                node-key="id"
+                :default-checked-keys="editReq.powers"
+                :default-expanded-keys="editReq.powers"
+                :props="treeProps">
+              </el-tree>
+            </el-form-item>
+          </el-form>
+        </el-col>
+        <el-col :span="16">
           <el-form label-position="top" disabled label-width="80px"size="mini" :disabled="editReq.viewMode">
             <el-form-item label="角色名字">
               <el-input v-model="editReq.name"></el-input>
@@ -191,41 +265,48 @@
   import Time from '@/components/Time'
 
   export default {
-    name: 'user',
+    name: 'role',
     components: {
       Time
     },
     data () {
       return {
-        // 当前页包含的权限值：访问 添加 删除 修改
-        localPower: {
-          view: 1201,
-          add: 120101,
-          del: 120102,
-          upd: 120103
-        },
         treeProps: {
           children: 'children',
           label: 'name'
         },
         tabCol: {
           seq: true,
-          name: true,
-          remark: true,
-          enable: true,
+          id: true,
+          thirdId: false,
+          account: true,
+          nickName: true,
+          role:{
+            name: true
+          },
+          avatar: false,
+          source: false,
+          url: false,
+          bio: false,
+          state: true,
+          lastIp: false,
+          lastAt: false,
           createdAt: true,
           updatedAt: true
         },
         dialogVisible: false,
-        checkAll: false,
-        isIndeterminate: true,
         powerTree: [],
-        roles: [],
+        items: [],
         delReq: {
           ids: []
         },
         req: {
           value: '',
+          id: 0,
+          roleId: 0,
+          start: '',
+          end: '',
+          source: '',
           pageSize: 10,
           pageNum: 1,
           total: 0
@@ -262,19 +343,12 @@
       init () {
         this.load()
       },
-      // 初始数据
-      initData () {
-        const powerTree = this.$request.fetchPowerTree()
-        powerTree.then(v => {
-          this.powerTree = v.data
-        })
-      },
       // 加载数据
       load () {
-        const roles = this.$request.fetchRoles(this.req)
-        roles.then(v => {
+        const resp = this.$request.fetchUsers(this.req)
+        resp.then(v => {
           if (!v.code) {
-            this.roles = v.data.list
+            this.items = v.data.list
             this.req.pageNum = v.data.page.pageNum
             this.req.pageSize = v.data.page.pageSize
             this.req.total = v.data.page.total
@@ -355,8 +429,6 @@
             this.$message.success('删除成功！')
             this.load()
           })
-        }).catch(() => {
-          this.$message.error('删除异常！')
         })
       },
       delSelection () {
@@ -374,8 +446,6 @@
             this.delReq.ids = []
             this.load()
           })
-        }).catch(() => {
-          this.$message.error('删除异常！')
         })
       },
       edit () {

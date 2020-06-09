@@ -4,7 +4,7 @@ import api from './urls'
 const baseUrl = ''
 
 const fetch = (url, method = 'get', data = null) => {
-  if (method.toLowerCase() === "get") {
+  if (method.toLowerCase() === 'get') {
     return axios.request({
       url: url,
       method: method,
@@ -21,10 +21,10 @@ const fetch = (url, method = 'get', data = null) => {
 }
 
 const fetchMap = m => {
-  let mp = {}
-  for(let item in m){
-    let key = `fetch${item.slice(0,-3)}`
-    let value = m[item]
+  const mp = {}
+  for (const item in m) {
+    const key = `fetch${item.slice(0, -3)}`
+    const value = m[item]
     mp[key] = data => fetch(value.u, value.m, data)
   }
   return mp
@@ -42,4 +42,3 @@ const fetchMap = m => {
 // }
 
 export default fetchMap(api)
-

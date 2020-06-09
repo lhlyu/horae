@@ -1,7 +1,7 @@
 import Mock from 'mockjs'
 import api from '../api/urls'
 
-import {getQueryString} from '../utils'
+import { getQueryString } from '../utils'
 
 export default ({ mock }) => {
   if (!mock) return
@@ -9,17 +9,17 @@ export default ({ mock }) => {
     timeout: '200-1000' // 模拟延迟
   })
   // 获取角色列表
-  Mock.mock(RegExp(api.RolesApi.u + "\?.*"), api.RolesApi.m, data => {
+  Mock.mock(RegExp(api.RolesApi.u + '.*'), api.RolesApi.m, data => {
     const req = {
-      value: getQueryString('value',data.url),
-      pageNum: parseInt(getQueryString('pageNum',data.url)),
-      pageSize: parseInt(getQueryString('pageSize',data.url)),
-      total: parseInt(getQueryString('total',data.url))
+      value: getQueryString('value', data.url),
+      pageNum: parseInt(getQueryString('pageNum', data.url)),
+      pageSize: parseInt(getQueryString('pageSize', data.url)),
+      total: parseInt(getQueryString('total', data.url))
     }
     const items = []
     for (let i = 0; i < req.pageSize; i++) {
       const item = {
-        'id|+1': 1,
+        id: Mock.Random.natural(1, 1000),
         name: '管理者' + i,
         remark: Mock.Random.cname(),
         enable: Mock.Random.natural(0, 1),
