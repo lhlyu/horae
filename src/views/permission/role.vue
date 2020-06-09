@@ -3,10 +3,10 @@
     <el-row :gutter="12">
       <el-card shadow="never">
         <el-row>
-          <el-col :span="5">
+          <el-col :span="12">
             <el-input v-power="localPower.view" placeholder="请输入内容" v-model="req.value" size="mini"></el-input>
           </el-col>
-          <el-col :span="19">
+          <el-col :span="12">
             <el-button v-power="localPower.view" type="primary" size="mini" plain @click="load">查询</el-button>
           </el-col>
         </el-row>
@@ -15,28 +15,28 @@
       <el-card shadow="never">
 
         <el-row justify="space-between">
-          <el-col :span="22">
+          <el-col>
             <el-button v-power="localPower.add" type="primary" size="mini" icon="el-icon-plus" plain @click="handleAdd">新增</el-button>
             <el-button :disabled="delReq.ids.length == 0" v-power="localPower.del" icon="el-icon-delete" v-throttling="delThrottling" type="warning" size="mini" plain>
               删除{{delReq.ids.length == 0 ? '' : ' * ' + delReq.ids.length}}
             </el-button>
-          </el-col>
-          <el-col :span="2">
-            <el-button v-throttling="refreshThrottling" type="success" size="mini" icon="el-icon-refresh" circle plain>
-            </el-button>
-            <el-popover
-              style="margin-left: 10px"
-              placement="bottom"
-              trigger="click">
-              <el-checkbox v-model="tabCol.seq">序号</el-checkbox><br>
-              <el-checkbox v-model="tabCol.name">名字</el-checkbox><br>
-              <el-checkbox v-model="tabCol.remark">备注</el-checkbox><br>
-              <el-checkbox v-model="tabCol.enable">是否启用</el-checkbox><br>
-              <el-checkbox v-model="tabCol.createdAt">创建时间</el-checkbox><br>
-              <el-checkbox v-model="tabCol.updatedAt">更新时间</el-checkbox>
-              <el-button slot="reference" type="success" size="mini" icon="el-icon-s-operation" circle plain>
+            <div class="u-float-right">
+              <el-button v-throttling="refreshThrottling" type="info" size="mini" icon="el-icon-refresh" circle plain>
               </el-button>
-            </el-popover>
+              <el-popover
+                style="margin-left: 10px;"
+                placement="bottom"
+                trigger="click">
+                <el-checkbox v-model="tabCol.seq">序号</el-checkbox><br>
+                <el-checkbox v-model="tabCol.name">名字</el-checkbox><br>
+                <el-checkbox v-model="tabCol.remark">备注</el-checkbox><br>
+                <el-checkbox v-model="tabCol.enable">是否启用</el-checkbox><br>
+                <el-checkbox v-model="tabCol.createdAt">创建时间</el-checkbox><br>
+                <el-checkbox v-model="tabCol.updatedAt">更新时间</el-checkbox>
+                <el-button slot="reference" type="info" size="mini" icon="el-icon-s-operation" circle plain>
+                </el-button>
+              </el-popover>
+            </div>
           </el-col>
         </el-row>
         <br>
@@ -80,8 +80,8 @@
             width="120"
             label="是否启用">
             <template slot-scope="scope">
-              <span v-if="scope.row.enable === 0"><el-tag effect="dark" size="mini">启用</el-tag></span>
-              <span v-else><el-tag effect="dark" size="mini" type="info">禁用</el-tag></span>
+              <span v-if="scope.row.enable === 0"><el-tag effect="light" size="mini">启用</el-tag></span>
+              <span v-else><el-tag effect="light" size="mini" type="info">禁用</el-tag></span>
             </template>
           </el-table-column>
           <el-table-column
@@ -109,17 +109,21 @@
             align="center">
             <template slot-scope="scope">
               <el-button
+                v-power="localPower.view"
+                size="mini"
+                type="text"
+                icon="el-icon-view"
+                @click="handleView(scope.$index, scope.row)">查看</el-button>
+              <el-button
                 v-power="localPower.upd"
                 size="mini"
-                type="primary"
-                plain
+                type="text"
                 icon="el-icon-edit"
                 @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
               <el-button
                 v-power="localPower.del"
                 size="mini"
-                type="warning"
-                plain
+                type="text"
                 icon="el-icon-delete"
                 @click="del(scope.$index, scope.row)">删除</el-button>
             </template>
@@ -151,7 +155,7 @@
       :visible.sync="dialogVisible">
       <el-row :gutter="10">
         <el-col :span="8">
-          <el-form label-position="top" label-width="80px"size="mini">
+          <el-form label-position="top" label-width="80px"size="mini" :disabled="editReq.viewMode">
             <el-form-item label="权限树">
               <el-tree
                 ref="tree"
@@ -166,7 +170,7 @@
           </el-form>
         </el-col>
         <el-col :span="16">
-          <el-form label-position="top" label-width="80px"size="mini">
+          <el-form label-position="top" disabled label-width="80px"size="mini" :disabled="editReq.viewMode">
             <el-form-item label="角色名字">
               <el-input v-model="editReq.name"></el-input>
             </el-form-item>
@@ -186,7 +190,7 @@
         </el-col>
       </el-row>
 
-      <span slot="footer" class="dialog-footer">
+      <span slot="footer" v-if="!editReq.viewMode" class="dialog-footer">
         <el-button type="primary" size="mini" plain @click="dialogVisible = false">取 消</el-button>
         <el-button type="warning" size="mini" plain v-throttling="editThrottling">确 定</el-button>
       </span>
@@ -239,6 +243,7 @@
           total: 0
         },
         editReq: {
+          viewMode: false,
           title: '编辑角色',
           id: 0,
           name: '',
@@ -297,6 +302,7 @@
       },
       handleAdd () {
         this.editReq = {
+          viewMode: false,
           title: '添加角色',
           id: 0,
           name: '',
@@ -306,8 +312,24 @@
         }
         this.dialogVisible = true
       },
+      handleView (index, row) {
+        this.editReq = {
+          viewMode: true,
+          title: '查看角色',
+          id: row.id,
+          name: row.name,
+          remark: row.remark,
+          powers: row.powers,
+          enable: row.enable
+        }
+        this.dialogVisible = true
+        this.$nextTick(() => {
+          this.$refs.tree.setCheckedKeys(row.powers)
+        })
+      },
       handleEdit (index, row) {
         this.editReq = {
+          viewMode: false,
           title: '编辑角色',
           id: row.id,
           name: row.name,
@@ -316,6 +338,9 @@
           enable: row.enable
         }
         this.dialogVisible = true
+        this.$nextTick(() => {
+          this.$refs.tree.setCheckedKeys(row.powers)
+        })
       },
       handleSelectionChange (val) {
         if (val && val.length) {

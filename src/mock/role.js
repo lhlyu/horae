@@ -1,15 +1,21 @@
 import Mock from 'mockjs'
 import api from '../api/urls'
 
+import {getQueryString} from '../utils'
+
 export default ({ mock }) => {
   if (!mock) return
   Mock.setup({
     timeout: '200-1000' // 模拟延迟
   })
   // 获取角色列表
-  Mock.mock(api.RoleApi.u, api.RoleApi.m, data => {
-    const req = JSON.parse(data.body)
-    console.log('req:', req)
+  Mock.mock(RegExp(api.RolesApi.u + "\?.*"), api.RolesApi.m, data => {
+    const req = {
+      value: getQueryString('value',data.url),
+      pageNum: parseInt(getQueryString('pageNum',data.url)),
+      pageSize: parseInt(getQueryString('pageSize',data.url)),
+      total: parseInt(getQueryString('total',data.url))
+    }
     const items = []
     for (let i = 0; i < req.pageSize; i++) {
       const item = {
@@ -58,34 +64,6 @@ export default ({ mock }) => {
     code: 0,
     message: 'success',
     data: null
-  })
-
-  // 获取权限
-  Mock.mock(api.PowerApi.u, api.PowerApi.m, {
-    code: 0,
-    message: 'success',
-    data: [{
-      id: 10,
-      name: '首页'
-    }, {
-      id: 12,
-      name: '权限'
-    }, {
-      id: 1201,
-      name: '用户'
-    }, {
-      id: 1202,
-      name: '角色'
-    }, {
-      id: 120201,
-      name: '角色添加'
-    }, {
-      id: 120202,
-      name: '角色删除'
-    }, {
-      id: 120203,
-      name: '角色更改'
-    }]
   })
 
   // 获取权限树

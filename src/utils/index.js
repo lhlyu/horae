@@ -152,9 +152,12 @@ export const removeHtmltag = (str) => {
 }
 
 // 获取url参数
-export const getQueryString = (name) => {
+export const getQueryString = (name,url = null) => {
   const reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i')
-  const search = window.location.search.split('?')[1] || ''
+  if(!url){
+    url = window.location.search
+  }
+  const search = url.split('?')[1] || ''
   const r = search.match(reg) || []
   return r[2]
 }

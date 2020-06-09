@@ -1,19 +1,21 @@
 <template>
-    <el-container>
-        <el-aside width="250px" class="u-transition" :class="fold ? 'u-fold':''"><ASide></ASide></el-aside>
-        <el-container  class="u-transition"  v-loading="isLoading">
-            <el-header><Header></Header></el-header>
-            <el-breadcrumb separator="/">
-                <el-breadcrumb-item v-for="(item,i) in breadcrumbItems" :key="i">{{item.name}}</el-breadcrumb-item>
-            </el-breadcrumb>
-            <el-main>
-                <keep-alive>
-                    <router-view></router-view>
-                </keep-alive>
-            </el-main>
-            <el-footer><Footer></Footer></el-footer>
-        </el-container>
+  <el-container>
+    <el-aside width="250px" class="u-transition" :class="fold ? 'u-fold':''"><ASide></ASide></el-aside>
+    <el-container  class="u-transition"  v-loading="isLoading">
+      <el-header><Header></Header></el-header>
+      <el-breadcrumb separator="/">
+        <el-breadcrumb-item v-for="(item,i) in breadcrumbItems" :key="i">{{item.name}}</el-breadcrumb-item>
+      </el-breadcrumb>
+      <el-main>
+        <transition name="fade">
+          <keep-alive>
+            <router-view></router-view>
+          </keep-alive>
+        </transition>
+      </el-main>
+      <el-footer><Footer></Footer></el-footer>
     </el-container>
+  </el-container>
 </template>
 
 <script>
@@ -83,6 +85,7 @@
   body > .el-container {
     margin-bottom: 40px;
   }
+
   .u-fold{
     width: 0px !important;
     opacity: 0;
