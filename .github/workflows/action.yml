@@ -3,7 +3,7 @@ name: GitHub Actions Build and Deploy Horae
 # 指定触发的条件：当master分支push时触发
 on:
   push:
-    branches: 
+    branches:
       - master
 
 # 任务
@@ -17,22 +17,18 @@ jobs:
       # 步骤名字，按顺序执行
       # 1. 将代码拷贝到虚拟系统
       - name: Checkout
+        # 用第三方库
         uses: actions/checkout@master
-        with: 
+        with:
+          # 持久化凭据
           persist-credentials: false
-      
-      # 2. 构建
-      - name: Install and Build
-        run: |
-          npm install
-          npm run-script build
-      
-      # 3. 部署
+
+      # 2. 部署
       - name: Deploy
         # 用第三方库
         uses: JamesIves/github-pages-deploy-action@master
-        env: 
+        env:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           BRANCH: gh-pages
           FOLDER: dist
-          BUILD_SCRIPT: npm install && npm rebuild node-sass && npm run build 
+          BUILD_SCRIPT: npm install && npm rebuild node-sass && npm run build
