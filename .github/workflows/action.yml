@@ -3,7 +3,8 @@ name: GitHub Actions Build and Deploy Horae
 # 指定触发的条件：当master分支push时触发
 on:
   push:
-    branches: master
+    branches: 
+      - master
 
 # 任务
 jobs:
