@@ -10,7 +10,8 @@
   },
   "standard": {
     "ignore": [
-      "**/utils/"
+      "**/utils/",
+      "docs/"
     ]
   },
   "dependencies": {

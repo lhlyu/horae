@@ -2,7 +2,7 @@
 import Vue from 'vue'
 import store from '@/store'
 import { contains } from '@/utils'
-import {Message} from "element-ui";
+import { Message } from 'element-ui'
 
 // 参考: https://cn.vuejs.org/v2/guide/custom-directive.html
 
@@ -23,7 +23,7 @@ Vue.directive('power', {
 
 // 节流指令
 Vue.directive('throttling', {
-  inserted: function(el, binding) {
+  inserted: function (el, binding) {
     const { callback, time } = binding.value
     el.callback = callback
     el.time = time
@@ -32,12 +32,12 @@ Vue.directive('throttling', {
       if (!el.preTime || nowTime - el.preTime > el.time) {
         el.preTime = nowTime
         el.callback()
-      }else{
-        Message.warning("请求太频繁，休息一下~")
+      } else {
+        Message.warning('请求太频繁，休息一下~')
       }
     })
   },
-  update: function(el, binding) {
+  update: function (el, binding) {
     const { callback, time } = binding.value
     el.callback = callback
     el.time = time

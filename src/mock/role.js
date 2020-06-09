@@ -8,11 +8,11 @@ export default ({ mock }) => {
   })
   // 获取角色列表
   Mock.mock(api.RoleApi.u, api.RoleApi.m, data => {
-    let req = JSON.parse(data.body)
-    console.log('req:',req)
-    let items = []
-    for (let i = 0;i < req.pageSize; i ++) {
-      let item = {
+    const req = JSON.parse(data.body)
+    console.log('req:', req)
+    const items = []
+    for (let i = 0; i < req.pageSize; i++) {
+      const item = {
         'id|+1': 1,
         name: '管理者' + i,
         remark: Mock.Random.cname(),
@@ -21,7 +21,7 @@ export default ({ mock }) => {
         createdAt: Mock.Random.natural(1582969294016, 1589017294016),
         updatedAt: Mock.Random.natural(1589017294016, 1591609294016)
       }
-      if (req.value.length){
+      if (req.value.length) {
         item.name = req.value
       }
       items.push(item)
@@ -60,7 +60,6 @@ export default ({ mock }) => {
     data: null
   })
 
-
   // 获取权限
   Mock.mock(api.PowerApi.u, api.PowerApi.m, {
     code: 0,
@@ -96,7 +95,7 @@ export default ({ mock }) => {
     data: [{
       id: 10,
       name: '首页'
-    },{
+    }, {
       id: 12,
       name: '权限',
       children: [{

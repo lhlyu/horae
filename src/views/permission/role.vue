@@ -11,19 +11,32 @@
           </el-col>
         </el-row>
       </el-card>
-
       <!-- 数据表格 start -->
       <el-card shadow="never">
 
-        <el-row>
-          <el-col :span="24">
+        <el-row justify="space-between">
+          <el-col :span="22">
             <el-button v-power="localPower.add" type="primary" size="mini" icon="el-icon-plus" plain @click="handleAdd">新增</el-button>
-            <el-button v-throttling="refreshThrottling" type="success" size="mini" icon="el-icon-refresh" plain>
-              刷新
-            </el-button>
             <el-button :disabled="delReq.ids.length == 0" v-power="localPower.del" icon="el-icon-delete" v-throttling="delThrottling" type="warning" size="mini" plain>
               删除{{delReq.ids.length == 0 ? '' : ' * ' + delReq.ids.length}}
             </el-button>
+          </el-col>
+          <el-col :span="2">
+            <el-button v-throttling="refreshThrottling" type="success" size="mini" icon="el-icon-refresh" circle plain>
+            </el-button>
+            <el-popover
+              style="margin-left: 10px"
+              placement="bottom"
+              trigger="click">
+              <el-checkbox v-model="tabCol.seq">序号</el-checkbox><br>
+              <el-checkbox v-model="tabCol.name">名字</el-checkbox><br>
+              <el-checkbox v-model="tabCol.remark">备注</el-checkbox><br>
+              <el-checkbox v-model="tabCol.enable">是否启用</el-checkbox><br>
+              <el-checkbox v-model="tabCol.createdAt">创建时间</el-checkbox><br>
+              <el-checkbox v-model="tabCol.updatedAt">更新时间</el-checkbox>
+              <el-button slot="reference" type="success" size="mini" icon="el-icon-s-operation" circle plain>
+              </el-button>
+            </el-popover>
           </el-col>
         </el-row>
         <br>
@@ -31,6 +44,10 @@
           stripe
           border
           size="mini"
+          row-class-name="u-transition"
+          cell-class-name="u-transition"
+          header-row-class-name="u-transition"
+          header-cell-class-name="u-transition"
           style="width: 100%"
           @selection-change="handleSelectionChange"
           :data="roles">
@@ -40,21 +57,25 @@
             width="50">
           </el-table-column>
           <el-table-column
+            v-if="tabCol.seq"
             align="center"
             label="序号"
             type="index">
           </el-table-column>
           <el-table-column
+            v-if="tabCol.name"
             align="center"
             label="名字"
             prop="name">
           </el-table-column>
           <el-table-column
+            v-if="tabCol.remark"
             align="center"
             label="备注"
             prop="remark">
           </el-table-column>
           <el-table-column
+            v-if="tabCol.enable"
             align="center"
             width="120"
             label="是否启用">
@@ -64,6 +85,7 @@
             </template>
           </el-table-column>
           <el-table-column
+            v-if="tabCol.createdAt"
             align="center"
             label="创建时间">
             <template slot-scope="scope">
@@ -72,6 +94,7 @@
             </template>
           </el-table-column>
           <el-table-column
+            v-if="tabCol.updatedAt"
             align="center"
             label="更新时间">
             <template slot-scope="scope">
@@ -108,7 +131,7 @@
             layout="prev , pager , next , jumper , total, sizes"
             @size-change="handlerChangeSize"
             @current-change="load"
-            :page-sizes="[10, 15, 20, 50]"
+            :page-sizes="[5, 10, 15, 20, 50]"
             :page-size="req.pageSize"
             :current-page="req.pageNum"
             :total="req.total">
@@ -193,12 +216,20 @@
           children: 'children',
           label: 'name'
         },
+        tabCol: {
+          seq: true,
+          name: true,
+          remark: true,
+          enable: true,
+          createdAt: true,
+          updatedAt: true
+        },
         dialogVisible: false,
         checkAll: false,
         isIndeterminate: true,
         powerTree: [],
         roles: [],
-        delReq:{
+        delReq: {
           ids: []
         },
         req: {
@@ -216,15 +247,15 @@
           enable: 0
         },
         // 节流
-        editThrottling:{
-          callback : this.edit,
+        editThrottling: {
+          callback: this.edit,
           time: 2000
         },
-        delThrottling:{
-          callback : this.delSelection,
+        delThrottling: {
+          callback: this.delSelection,
           time: 2000
         },
-        refreshThrottling:{
+        refreshThrottling: {
           callback: () => {
             this.initData()
             this.init()
@@ -239,7 +270,7 @@
         this.load()
       },
       // 初始数据
-      initData(){
+      initData () {
         const powerTree = this.$request.fetchPowerTree()
         powerTree.then(v => {
           this.powerTree = v.data
@@ -257,12 +288,12 @@
           }
         })
       },
-      handlerChangeSize(val){
+      handlerChangeSize (val) {
         this.req.pageSize = val
         this.load()
       },
-      handlerClose(){
-        this.$refs.tree.setCheckedKeys([]);
+      handlerClose () {
+        this.$refs.tree.setCheckedKeys([])
       },
       handleAdd () {
         this.editReq = {
@@ -273,7 +304,6 @@
           powers: [],
           enable: 0
         }
-        console.log("editReq:",this.editReq)
         this.dialogVisible = true
       },
       handleEdit (index, row) {
@@ -288,9 +318,9 @@
         this.dialogVisible = true
       },
       handleSelectionChange (val) {
-        if (val && val.length){
-          let items = []
-          for (let i = 0,length = val.length; i < length;i ++) {
+        if (val && val.length) {
+          const items = []
+          for (let i = 0, length = val.length; i < length; i++) {
             items.push(val[i].id)
           }
           this.delReq.ids = items
@@ -316,8 +346,8 @@
           this.$message.error('删除异常！')
         })
       },
-      delSelection(){
-        this.$confirm(`此操作将删除所有选中的角色, 是否继续?`, '提示', {
+      delSelection () {
+        this.$confirm('此操作将删除所有选中的角色, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
