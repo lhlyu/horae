@@ -1,0 +1,26 @@
+# 流程描述
+name: GitHub Actions Build and Deploy Horae
+# 指定触发的条件：当master分支push时触发
+on:
+  push:
+    branches: master
+
+# 任务
+jobs:
+  # 任务唯一ID/名字
+  build-and-deploy:
+    # 指定运行系统
+    runs-on: ubuntu-latest
+    # 步骤
+    steps:
+      # 步骤名字，按顺序执行
+      - name: Checkout
+        uses: actions/checkout@master
+      
+      - name: build and deploy
+        uses: lhlyu/horae@master
+        env: 
+          ACCESS_TOKEN: ${{ secrets.HORAE_ACTIONS_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: build
+          BUILD_SCRIPT: npm install && npm run build 
