@@ -1,6 +1,7 @@
 {
   "name": "horae",
   "version": "0.0.1",
+  "homepage": "https://lhlyu.github.io/horae",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
