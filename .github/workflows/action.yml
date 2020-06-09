@@ -25,7 +25,6 @@ jobs:
       - name: Install and Build
         run: |
           npm install
-          npm rebuild node-sass
           npm run-script build
       
       # 3. 部署
@@ -36,4 +35,4 @@ jobs:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           BRANCH: gh-pages
           FOLDER: dist
-          BUILD_SCRIPT: npm install && npm run build 
+          BUILD_SCRIPT: npm install && npm rebuild node-sass && npm run build 
