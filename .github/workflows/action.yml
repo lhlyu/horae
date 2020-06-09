@@ -14,10 +14,23 @@ jobs:
     # 步骤
     steps:
       # 步骤名字，按顺序执行
-      - name: build and deploy
+      # 1. 将代码拷贝到虚拟系统
+      - name: Checkout
+        uses: actions/checkout@master
+        with: 
+          persist-credentials: false
+      
+      # 2. 构建
+      - name: Install and Build
+        run: |
+          npm install
+          npm run-script build
+      
+      # 3. 部署
+      - name: Deploy
         uses: lhlyu/horae@master
         env: 
           ACCESS_TOKEN: ${{ secrets.HORAE_ACTIONS_TOKEN }}
           BRANCH: gh-pages
-          FOLDER: build
+          FOLDER: dist
           BUILD_SCRIPT: npm install && npm run build 
