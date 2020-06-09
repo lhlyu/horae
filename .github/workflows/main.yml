@@ -14,9 +14,6 @@ jobs:
     # 步骤
     steps:
       # 步骤名字，按顺序执行
-      - name: Checkout
-        uses: actions/checkout@master
-      
       - name: build and deploy
         uses: lhlyu/horae@master
         env: 
