@@ -4,7 +4,7 @@ module.exports = {
   devServer: {
     port: 8888 // 端口
   },
-  publicPath: isProduction ? 'https://cdn.jsdelivr.net/gh/lhlyu/horae@master/docs/' : '/'
+  publicPath: isProduction ? 'https://cdn.jsdelivr.net/gh/lhlyu/horae@gh-pages/' : '/'
   // chainWebpack: (config) => {
   //   //忽略的打包文件
   //   config.externals({
