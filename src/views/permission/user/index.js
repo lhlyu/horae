@@ -7,6 +7,8 @@ export default {
   },
   data () {
     return {
+      searchVisible: true,
+      dialogVisible: false,
       treeProps: {
         children: 'children',
         label: 'name'
@@ -30,7 +32,6 @@ export default {
         createdAt: true,
         updatedAt: true
       },
-      dialogVisible: false,
       powerTree: [],
       items: [],
       delReq: {
@@ -63,6 +64,10 @@ export default {
       },
       delThrottling: {
         callback: this.delSelection,
+        time: 2000
+      },
+      resetThrottling: {
+        callback: this.reset,
         time: 2000
       },
       refreshThrottling: {
@@ -179,6 +184,25 @@ export default {
             return
           }
           this.$message.success('删除成功！')
+          this.delReq.ids = []
+          this.load()
+        })
+      })
+    },
+    reset () {
+      this.$prompt('输入新密码', '重置密码', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        inputPattern: /[a-zA-Z0-9_]+/,
+        inputErrorMessage: '密码不能为空 (大小写字母、数字和下划线)',
+        type: 'primary'
+      }).then(({value}) => {
+        this.$request.fetchDelRoles(this.delReq.ids).then(v => {
+          if (v.code) {
+            this.$message.warning('重置失败！')
+            return
+          }
+          this.$message.success('重置成功！')
           this.delReq.ids = []
           this.load()
         })

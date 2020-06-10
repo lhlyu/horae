@@ -1,6 +1,6 @@
 <template>
   <el-container>
-    <el-aside width="250px" class="u-transition" :class="fold ? 'u-fold':''"><ASide></ASide></el-aside>
+    <el-aside width="250px" :class="fold ? 'u-fold':''"><ASide></ASide></el-aside>
     <el-container  class="u-transition"  v-loading="isLoading">
       <el-header><Header></Header></el-header>
       <el-breadcrumb separator="/">
@@ -88,6 +88,5 @@
 
   .u-fold{
     width: 0px !important;
-    opacity: 0;
   }
 </style>

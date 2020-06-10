@@ -1,16 +1,18 @@
 <template>
   <div class="u-container">
     <el-row :gutter="12">
-      <el-card shadow="never">
-        <el-row>
-          <el-col :span="12">
-            <el-input v-power="$codes.user.view" placeholder="请输入内容" v-model="req.value" size="mini"></el-input>
-          </el-col>
-          <el-col :span="12">
-            <el-button v-power="$codes.user.view" type="primary" size="mini" plain @click="load">查询</el-button>
-          </el-col>
-        </el-row>
-      </el-card>
+      <el-collapse-transition>
+        <el-card shadow="never" v-show="searchVisible">
+          <el-row>
+            <el-col :span="12">
+              <el-input v-power="$codes.role.view" placeholder="请输入内容" v-model="req.value" size="mini"></el-input>
+            </el-col>
+            <el-col :span="12">
+              <el-button v-power="$codes.role.view" type="primary" size="mini" plain @click="load">查询</el-button>
+            </el-col>
+          </el-row>
+        </el-card>
+      </el-collapse-transition>
       <!-- 数据表格 start -->
       <el-card shadow="never">
 
@@ -20,10 +22,12 @@
             <el-button :disabled="delReq.ids.length == 0" v-power="$codes.user.del" icon="el-icon-delete" v-throttling="delThrottling" type="warning" size="mini" plain>
               删除{{delReq.ids.length == 0 ? '' : ' * ' + delReq.ids.length}}
             </el-button>
-            <el-button :disabled="delReq.ids.length == 0" v-power="$codes.user.upd" icon="el-icon-refresh-left" v-throttling="delThrottling" type="info" size="mini" plain>
+            <el-button :disabled="delReq.ids.length == 0" v-power="$codes.user.upd" icon="el-icon-refresh-left" v-throttling="resetThrottling" type="info" size="mini" plain>
               重置密码{{delReq.ids.length == 0 ? '' : ' * ' + delReq.ids.length}}
             </el-button>
             <div class="u-float-right">
+              <el-button @click="searchVisible = !searchVisible" type="info" size="mini" icon="el-icon-search" circle plain>
+              </el-button>
               <el-button v-throttling="refreshThrottling" type="info" size="mini" icon="el-icon-refresh" circle plain>
               </el-button>
               <el-popover

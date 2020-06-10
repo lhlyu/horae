@@ -7,6 +7,7 @@ export default {
   },
   data () {
     return {
+      searchVisible: true,
       dialogVisible: false,
       treeProps: {
         children: 'children',
