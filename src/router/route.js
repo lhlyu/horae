@@ -5,8 +5,8 @@ import Login from '@/views/login/index.vue'
 const Blank = () => import('@/layout/blank.vue')
 const NotFound = () => import('@/views/404.vue')
 const Index = () => import('@/views/index/index.vue')
-const UserPermission = () => import('@/views/permission/user.vue')
-const RolePermission = () => import('@/views/permission/role.vue')
+const UserPermission = () => import('@/views/permission/user/index.vue')
+const RolePermission = () => import('@/views/permission/role/index.vue')
 
 // 静态路由
 const routes = [{

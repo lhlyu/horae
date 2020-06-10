@@ -4,10 +4,10 @@
       <el-card shadow="never">
         <el-row>
           <el-col :span="12">
-            <el-input v-power="$codes.role.view" placeholder="请输入内容" v-model="req.value" size="mini"></el-input>
+            <el-input v-power="$codes.user.view" placeholder="请输入内容" v-model="req.value" size="mini"></el-input>
           </el-col>
           <el-col :span="12">
-            <el-button v-power="$codes.role.view" type="primary" size="mini" plain @click="load">查询</el-button>
+            <el-button v-power="$codes.user.view" type="primary" size="mini" plain @click="load">查询</el-button>
           </el-col>
         </el-row>
       </el-card>
@@ -16,9 +16,12 @@
 
         <el-row justify="space-between">
           <el-col>
-            <el-button v-power="$codes.role.add" type="primary" size="mini" icon="el-icon-plus" plain @click="handleAdd">新增</el-button>
-            <el-button :disabled="delReq.ids.length == 0" v-power="$codes.role.del" icon="el-icon-delete" v-throttling="delThrottling" type="warning" size="mini" plain>
+            <el-button v-power="$codes.user.add" type="primary" size="mini" icon="el-icon-plus" plain @click="handleAdd">新增</el-button>
+            <el-button :disabled="delReq.ids.length == 0" v-power="$codes.user.del" icon="el-icon-delete" v-throttling="delThrottling" type="warning" size="mini" plain>
               删除{{delReq.ids.length == 0 ? '' : ' * ' + delReq.ids.length}}
+            </el-button>
+            <el-button :disabled="delReq.ids.length == 0" v-power="$codes.user.upd" icon="el-icon-refresh-left" v-throttling="delThrottling" type="info" size="mini" plain>
+              重置密码{{delReq.ids.length == 0 ? '' : ' * ' + delReq.ids.length}}
             </el-button>
             <div class="u-float-right">
               <el-button v-throttling="refreshThrottling" type="info" size="mini" icon="el-icon-refresh" circle plain>
@@ -29,9 +32,17 @@
                 trigger="click">
                 <el-checkbox v-model="tabCol.seq">序号</el-checkbox><br>
                 <el-checkbox v-model="tabCol.id">ID</el-checkbox><br>
-                <el-checkbox v-model="tabCol.name">名字</el-checkbox><br>
-                <el-checkbox v-model="tabCol.remark">备注</el-checkbox><br>
-                <el-checkbox v-model="tabCol.enable">是否启用</el-checkbox><br>
+                <el-checkbox v-model="tabCol.thirdId">第三方ID</el-checkbox><br>
+                <el-checkbox v-model="tabCol.account">账号</el-checkbox><br>
+                <el-checkbox v-model="tabCol.nickName">昵称</el-checkbox><br>
+                <el-checkbox v-model="tabCol.role.name">角色</el-checkbox><br>
+                <el-checkbox v-model="tabCol.avatar">头像</el-checkbox><br>
+                <el-checkbox v-model="tabCol.source">来源</el-checkbox><br>
+                <el-checkbox v-model="tabCol.url">地址</el-checkbox><br>
+                <el-checkbox v-model="tabCol.bio">签名</el-checkbox><br>
+                <el-checkbox v-model="tabCol.state">状态</el-checkbox><br>
+                <el-checkbox v-model="tabCol.lastIp">最后登陆IP</el-checkbox><br>
+                <el-checkbox v-model="tabCol.lastAt">最后登陆时间</el-checkbox><br>
                 <el-checkbox v-model="tabCol.createdAt">创建时间</el-checkbox><br>
                 <el-checkbox v-model="tabCol.updatedAt">更新时间</el-checkbox>
                 <el-button slot="reference" type="info" size="mini" icon="el-icon-s-operation" circle plain>
@@ -70,25 +81,80 @@
             prop="id">
           </el-table-column>
           <el-table-column
-            v-if="tabCol.name"
+            v-if="tabCol.thirdId"
             align="center"
-            label="名字"
-            prop="name">
+            label="第三方ID"
+            prop="thirdId">
           </el-table-column>
           <el-table-column
-            v-if="tabCol.remark"
+            v-if="tabCol.account"
             align="center"
-            label="备注"
-            prop="remark">
+            label="账号"
+            prop="account">
           </el-table-column>
           <el-table-column
-            v-if="tabCol.enable"
+            v-if="tabCol.nickName"
             align="center"
-            width="120"
-            label="是否启用">
+            label="昵称"
+            prop="nickName">
+          </el-table-column>
+          <el-table-column
+            v-if="tabCol.role.name"
+            align="center"
+            label="角色"
+            prop="role.name">
+          </el-table-column>
+          <el-table-column
+            v-if="tabCol.avatar"
+            align="center"
+            label="头像">
             <template slot-scope="scope">
-              <span v-if="scope.row.enable === 0"><el-tag effect="light" size="mini">启用</el-tag></span>
-              <span v-else><el-tag effect="light" size="mini" type="info">禁用</el-tag></span>
+              <el-avatar :size="45" :src="scope.row.avatar">
+                <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"/>
+              </el-avatar>
+            </template>
+          </el-table-column>
+          <el-table-column
+            v-if="tabCol.source"
+            align="center"
+            label="来源"
+            prop="source">
+          </el-table-column>
+          <el-table-column
+            v-if="tabCol.url"
+            align="center"
+            label="地址"
+            prop="url">
+            <template slot-scope="scope">
+              <el-link v-if="scope.row.url.length" :href="scope.row.url" target="_blank" type="primary">个人网站</el-link>
+              <el-link v-else disabled>暂无网站</el-link>
+            </template>
+          </el-table-column>
+          <el-table-column
+            v-if="tabCol.bio"
+            align="center"
+            label="签名"
+            prop="bio">
+          </el-table-column>
+          <el-table-column
+            v-if="tabCol.state"
+            align="center"
+            label="状态"
+            prop="state">
+          </el-table-column>
+          <el-table-column
+            v-if="tabCol.lastIp"
+            align="center"
+            label="最后登陆IP"
+            prop="lastIp">
+          </el-table-column>
+          <el-table-column
+            v-if="tabCol.lastAt"
+            align="center"
+            label="最后登陆时间">
+            <template slot-scope="scope">
+              <i class="el-icon-time" style="margin-right: 5px"></i>
+              <span><Time :time="scope.row.lastAt"></Time> </span>
             </template>
           </el-table-column>
           <el-table-column
@@ -116,19 +182,19 @@
             align="center">
             <template slot-scope="scope">
               <el-button
-                v-power="$codes.role.view"
+                v-power="$codes.user.view"
                 size="mini"
                 type="text"
                 icon="el-icon-view"
                 @click="handleView(scope.$index, scope.row)">查看</el-button>
               <el-button
-                v-power="$codes.role.upd"
+                v-power="$codes.user.upd"
                 size="mini"
                 type="text"
                 icon="el-icon-edit"
                 @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
               <el-button
-                v-power="$codes.role.del"
+                v-power="$codes.user.del"
                 size="mini"
                 type="text"
                 icon="el-icon-delete"
@@ -206,201 +272,4 @@
   </div>
 </template>
 
-<script>
-  import Time from '@/components/Time'
-
-  export default {
-    name: 'role',
-    components: {
-      Time
-    },
-    data () {
-      return {
-        treeProps: {
-          children: 'children',
-          label: 'name'
-        },
-        tabCol: {
-          seq: true,
-          id: true,
-          name: true,
-          remark: true,
-          enable: true,
-          createdAt: true,
-          updatedAt: true
-        },
-        dialogVisible: false,
-        isIndeterminate: true,
-        powerTree: [],
-        items: [],
-        delReq: {
-          ids: []
-        },
-        req: {
-          value: '',
-          pageSize: 10,
-          pageNum: 1,
-          total: 0
-        },
-        editReq: {
-          viewMode: false,
-          title: '编辑角色',
-          id: 0,
-          name: '',
-          remark: '',
-          powers: [],
-          enable: 0
-        },
-        // 节流
-        editThrottling: {
-          callback: this.edit,
-          time: 2000
-        },
-        delThrottling: {
-          callback: this.delSelection,
-          time: 2000
-        },
-        refreshThrottling: {
-          callback: () => {
-            this.initData()
-            this.init()
-          },
-          time: 2000
-        }
-      }
-    },
-    methods: {
-      // 初始化
-      init () {
-        this.load()
-      },
-      // 初始数据
-      initData () {
-        const powerTree = this.$request.fetchPowerTree()
-        powerTree.then(v => {
-          this.powerTree = v.data
-        })
-      },
-      // 加载数据
-      load () {
-        const resp = this.$request.fetchRoles(this.req)
-        resp.then(v => {
-          if (!v.code) {
-            this.items = v.data.list
-            this.req.pageNum = v.data.page.pageNum
-            this.req.pageSize = v.data.page.pageSize
-            this.req.total = v.data.page.total
-          }
-        })
-      },
-      handlerChangeSize (val) {
-        this.req.pageSize = val
-        this.load()
-      },
-      handlerClose () {
-        this.$refs.tree.setCheckedKeys([])
-      },
-      handleAdd () {
-        this.editReq = {
-          viewMode: false,
-          title: '添加角色',
-          id: 0,
-          name: '',
-          remark: '',
-          powers: [],
-          enable: 0
-        }
-        this.dialogVisible = true
-      },
-      handleView (index, row) {
-        this.editReq = {
-          viewMode: true,
-          title: '查看角色',
-          id: row.id,
-          name: row.name,
-          remark: row.remark,
-          powers: row.powers,
-          enable: row.enable
-        }
-        this.dialogVisible = true
-        this.$nextTick(() => {
-          this.$refs.tree.setCheckedKeys(row.powers)
-        })
-      },
-      handleEdit (index, row) {
-        this.editReq = {
-          viewMode: false,
-          title: '编辑角色',
-          id: row.id,
-          name: row.name,
-          remark: row.remark,
-          powers: row.powers,
-          enable: row.enable
-        }
-        this.dialogVisible = true
-        this.$nextTick(() => {
-          this.$refs.tree.setCheckedKeys(row.powers)
-        })
-      },
-      handleSelectionChange (val) {
-        if (val && val.length) {
-          const items = []
-          for (let i = 0, length = val.length; i < length; i++) {
-            items.push(val[i].id)
-          }
-          this.delReq.ids = items
-          return
-        }
-        this.delReq.ids = []
-      },
-      del (index, row) {
-        this.$confirm(`此操作将删除该角色『${row.name}』, 是否继续?`, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$request.fetchDelRole(this.editReq).then(v => {
-            if (v.code) {
-              this.$message.warning('删除失败！')
-              return
-            }
-            this.$message.success('删除成功！')
-            this.load()
-          })
-        })
-      },
-      delSelection () {
-        this.$confirm('此操作将删除所有选中的角色, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$request.fetchDelRoles(this.delReq.ids).then(v => {
-            if (v.code) {
-              this.$message.warning('删除失败！')
-              return
-            }
-            this.$message.success('删除成功！')
-            this.delReq.ids = []
-            this.load()
-          })
-        })
-      },
-      edit () {
-        if (this.editReq.name.trim() === '') {
-          this.$message.warning('角色名字不能为空！')
-          return
-        }
-        const tip = this.editReq.id === 0 ? '新增' : '修改'
-        this.$request.fetchEditRole(this.editReq).then(v => {
-          if (v.code) {
-            this.$message.warning(`${tip}失败！`)
-            return
-          }
-          this.$message.success(`${tip}成功！`)
-          this.load()
-        })
-      }
-    }
-  }
-</script>
+<script src="./index.js"></script>

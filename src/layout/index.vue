@@ -29,9 +29,9 @@
   export default {
     name: "layout",
     components: {
-        Header,
-        ASide,
-        Footer
+      Header,
+      ASide,
+      Footer
     },
     mounted(){
     },
