@@ -107,8 +107,12 @@
           <el-table-column
             v-if="tabCol.avatar"
             align="center"
-            label="头像"
-            prop="avatar">
+            label="头像">
+            <template slot-scope="scope">
+              <el-avatar :size="45" :src="scope.row.avatar">
+                <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"/>
+              </el-avatar>
+            </template>
           </el-table-column>
           <el-table-column
             v-if="tabCol.source"
@@ -121,6 +125,10 @@
             align="center"
             label="地址"
             prop="url">
+            <template slot-scope="scope">
+              <el-link v-if="scope.row.url.length" :href="scope.row.url" target="_blank" type="primary">个人网站</el-link>
+              <el-link v-else disabled>暂无网站</el-link>
+            </template>
           </el-table-column>
           <el-table-column
             v-if="tabCol.bio"
@@ -143,8 +151,11 @@
           <el-table-column
             v-if="tabCol.lastAt"
             align="center"
-            label="最后登陆时间"
-            prop="lastAt">
+            label="最后登陆时间">
+            <template slot-scope="scope">
+              <i class="el-icon-time" style="margin-right: 5px"></i>
+              <span><Time :time="scope.row.lastAt"></Time> </span>
+            </template>
           </el-table-column>
           <el-table-column
             v-if="tabCol.createdAt"
