@@ -19,8 +19,8 @@
         <el-row justify="space-between">
           <el-col>
             <el-button v-power="$codes.role.add" type="primary" size="mini" icon="el-icon-plus" plain @click="handleAdd">新增</el-button>
-            <el-button :disabled="delReq.ids.length == 0" v-power="$codes.role.del" icon="el-icon-delete" v-throttling="delThrottling" type="warning" size="mini" plain>
-              删除{{delReq.ids.length == 0 ? '' : ' * ' + delReq.ids.length}}
+            <el-button :disabled="selectReq.ids.length == 0" v-power="$codes.role.del" icon="el-icon-delete" v-throttling="delThrottling" type="warning" size="mini" plain>
+              删除{{selectReq.ids.length == 0 ? '' : ' * ' + selectReq.ids.length}}
             </el-button>
             <div class="u-float-right">
               <el-button @click="searchVisible = !searchVisible" type="info" size="mini" icon="el-icon-search" circle plain>

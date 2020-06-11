@@ -28,13 +28,13 @@ export default {
         bio: false,
         state: true,
         lastIp: false,
-        lastAt: false,
-        createdAt: true,
-        updatedAt: true
+        lastAt: true,
+        createdAt: false,
+        updatedAt: false
       },
-      powerTree: [],
+      item: null,
       items: [],
-      delReq: {
+      selectReq: {
         ids: []
       },
       req: {
@@ -50,12 +50,8 @@ export default {
       },
       editReq: {
         viewMode: false,
-        title: '编辑角色',
-        id: 0,
-        name: '',
-        remark: '',
-        powers: [],
-        enable: 0
+        title: '编辑用户',
+        id: 0
       },
       // 节流
       editThrottling: {
@@ -151,10 +147,10 @@ export default {
         for (let i = 0, length = val.length; i < length; i++) {
           items.push(val[i].id)
         }
-        this.delReq.ids = items
+        this.selectReq.ids = items
         return
       }
-      this.delReq.ids = []
+      this.selectReq.ids = []
     },
     del (index, row) {
       this.$confirm(`此操作将删除该角色『${row.name}』, 是否继续?`, '提示', {
@@ -178,13 +174,13 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$request.fetchDelRoles(this.delReq.ids).then(v => {
+        this.$request.fetchDelRoles(this.selectReq.ids).then(v => {
           if (v.code) {
             this.$message.warning('删除失败！')
             return
           }
           this.$message.success('删除成功！')
-          this.delReq.ids = []
+          this.selectReq.ids = []
           this.load()
         })
       })
@@ -197,13 +193,13 @@ export default {
         inputErrorMessage: '密码不能为空 (大小写字母、数字和下划线)',
         type: 'primary'
       }).then(({value}) => {
-        this.$request.fetchDelRoles(this.delReq.ids).then(v => {
+        this.$request.fetchDelRoles(this.selectReq.ids).then(v => {
           if (v.code) {
             this.$message.warning('重置失败！')
             return
           }
           this.$message.success('重置成功！')
-          this.delReq.ids = []
+          this.selectReq.ids = []
           this.load()
         })
       })

@@ -24,7 +24,7 @@ export default {
       },
       powerTree: [],
       items: [],
-      delReq: {
+      selectReq: {
         ids: []
       },
       req: {
@@ -139,10 +139,10 @@ export default {
         for (let i = 0, length = val.length; i < length; i++) {
           items.push(val[i].id)
         }
-        this.delReq.ids = items
+        this.selectReq.ids = items
         return
       }
-      this.delReq.ids = []
+      this.selectReq.ids = []
     },
     del (index, row) {
       this.$confirm(`此操作将删除该角色『${row.name}』, 是否继续?`, '提示', {
@@ -166,13 +166,13 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$request.fetchDelRoles(this.delReq.ids).then(v => {
+        this.$request.fetchDelRoles(this.selectReq.ids).then(v => {
           if (v.code) {
             this.$message.warning('删除失败！')
             return
           }
           this.$message.success('删除成功！')
-          this.delReq.ids = []
+          this.selectReq.ids = []
           this.load()
         })
       })

@@ -19,11 +19,11 @@
         <el-row justify="space-between">
           <el-col>
             <el-button v-power="$codes.user.add" type="primary" size="mini" icon="el-icon-plus" plain @click="handleAdd">新增</el-button>
-            <el-button :disabled="delReq.ids.length == 0" v-power="$codes.user.del" icon="el-icon-delete" v-throttling="delThrottling" type="warning" size="mini" plain>
-              删除{{delReq.ids.length == 0 ? '' : ' * ' + delReq.ids.length}}
+            <el-button :disabled="selectReq.ids.length == 0" v-power="$codes.user.del" icon="el-icon-delete" v-throttling="delThrottling" type="warning" size="mini" plain>
+              删除{{selectReq.ids.length == 0 ? '' : ' * ' + selectReq.ids.length}}
             </el-button>
-            <el-button :disabled="delReq.ids.length == 0" v-power="$codes.user.upd" icon="el-icon-refresh-left" v-throttling="resetThrottling" type="info" size="mini" plain>
-              重置密码{{delReq.ids.length == 0 ? '' : ' * ' + delReq.ids.length}}
+            <el-button :disabled="selectReq.ids.length == 0" v-power="$codes.user.upd" icon="el-icon-refresh-left" v-throttling="resetThrottling" type="info" size="mini" plain>
+              重置密码{{selectReq.ids.length == 0 ? '' : ' * ' + selectReq.ids.length}}
             </el-button>
             <div class="u-float-right">
               <el-button @click="searchVisible = !searchVisible" type="info" size="mini" icon="el-icon-search" circle plain>
@@ -230,41 +230,26 @@
       :title="editReq.title"
       :append-to-body="true"
       :visible.sync="dialogVisible">
-      <el-row :gutter="10">
-        <el-col :span="8">
-          <el-form label-position="top" label-width="80px"size="mini" :disabled="editReq.viewMode">
-            <el-form-item label="权限树">
-              <el-tree
-                ref="tree"
-                :data="powerTree"
-                show-checkbox
-                node-key="id"
-                :default-checked-keys="editReq.powers"
-                :default-expanded-keys="editReq.powers"
-                :props="treeProps">
-              </el-tree>
-            </el-form-item>
-          </el-form>
-        </el-col>
-        <el-col :span="16">
-          <el-form label-position="top" disabled label-width="80px"size="mini" :disabled="editReq.viewMode">
-            <el-form-item label="角色名字">
-              <el-input v-model="editReq.name"></el-input>
-            </el-form-item>
-            <el-form-item label="角色描述">
-              <el-input v-model="editReq.remark" type="textarea" :rows="2"></el-input>
-            </el-form-item>
 
-            <el-form-item label="是否启用">
-              <el-switch
-                v-model="editReq.enable"
-                :active-value="0"
-                active-text="启用"
-                inactive-text="禁用">
-              </el-switch>
-            </el-form-item>
-          </el-form>
-        </el-col>
+      <el-row :gutter="10">
+        <el-tabs tab-position="left" style="height: 200px;">
+          <el-tab-pane label="基本信息">
+
+          </el-tab-pane>
+          <el-tab-pane label="高级设置">
+
+          </el-tab-pane>
+          <el-tab-pane label="最近事件">
+            <el-timeline :reverse="true">
+              <el-timeline-item
+                v-for="(activity, index) in activities"
+                :key="index"
+                :timestamp="activity.timestamp">
+                {{activity.content}}
+              </el-timeline-item>
+            </el-timeline>
+          </el-tab-pane>
+        </el-tabs>
       </el-row>
 
       <span slot="footer" v-if="!editReq.viewMode" class="dialog-footer">
