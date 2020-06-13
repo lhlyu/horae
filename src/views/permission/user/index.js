@@ -13,6 +13,33 @@ export default {
         children: 'children',
         label: 'name'
       },
+      pickerOptions: {
+        shortcuts: [{
+          text: '最近一周',
+          onClick (picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+            picker.$emit('pick', [start, end])
+          }
+        }, {
+          text: '最近一个月',
+          onClick (picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+            picker.$emit('pick', [start, end])
+          }
+        }, {
+          text: '最近三个月',
+          onClick (picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+            picker.$emit('pick', [start, end])
+          }
+        }]
+      },
       tabCol: {
         seq: true,
         id: true,
@@ -32,15 +59,18 @@ export default {
         createdAt: false,
         updatedAt: false
       },
+      roleList: [],
+      sources: [],
       item: null,
       items: [],
       selectReq: {
         ids: []
       },
+      dateRange: '',
       req: {
         value: '',
-        id: 0,
-        roleId: 0,
+        id: '',
+        roleId: null,
         start: '',
         end: '',
         source: '',
@@ -80,8 +110,23 @@ export default {
     init () {
       this.load()
     },
+    async initData () {
+      const roleListResult = await this.$request.fetchRoleList()
+      const sourcesResult = await this.$request.fetchSources()
+      if (!roleListResult.code) {
+        this.roleList = roleListResult.data
+      }
+      if (!sourcesResult.code) {
+        this.sources = sourcesResult.data
+      }
+    },
     // 加载数据
     load () {
+      if (this.dateRange && this.dateRange.length) {
+        this.req.start = +this.dateRange[0]
+        this.req.end = +this.dateRange[1]
+      }
+      console.log(this.req)
       const resp = this.$request.fetchUsers(this.req)
       resp.then(v => {
         if (!v.code) {
@@ -91,6 +136,18 @@ export default {
           this.req.total = v.data.page.total
         }
       })
+    },
+    resetReq () {
+      this.dateRange = ''
+      this.req = {
+        value: '',
+        id: '',
+        roleId: null,
+        start: '',
+        end: '',
+        source: ''
+      }
+      this.initData()
     },
     handlerChangeSize (val) {
       this.req.pageSize = val
@@ -158,7 +215,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$request.fetchDelRole(this.editReq).then(v => {
+        this.$request.fetchDelUser(this.editReq).then(v => {
           if (v.code) {
             this.$message.warning('删除失败！')
             return
@@ -192,7 +249,7 @@ export default {
         inputPattern: /[a-zA-Z0-9_]+/,
         inputErrorMessage: '密码不能为空 (大小写字母、数字和下划线)',
         type: 'primary'
-      }).then(({value}) => {
+      }).then(({ value }) => {
         this.$request.fetchDelRoles(this.selectReq.ids).then(v => {
           if (v.code) {
             this.$message.warning('重置失败！')

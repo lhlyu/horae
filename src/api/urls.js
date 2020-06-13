@@ -16,7 +16,8 @@ export default {
   EditUser: S('/api/admin/user', 'post'),
   // 删除用户
   DelUser: S('/api/admin/user', 'delete'),
-
+  // 获取用户来源
+  SourcesApi: S('/api/admin/sources'),
   // 角色
   RolesApi: S('/api/admin/roles'),
   // 编辑角色
@@ -26,5 +27,6 @@ export default {
   // 删除多个角色
   DelRolesApi: S('/api/admin/roles', 'delete'),
   // 获取权限树
-  PowerTreeApi: S('/api/admin/power-tree')
+  PowerTreeApi: S('/api/admin/power-tree'),
+  RoleListApi: S('/api/admin/role-list')
 }

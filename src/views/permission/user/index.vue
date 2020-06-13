@@ -4,12 +4,52 @@
       <el-collapse-transition>
         <el-card shadow="never" v-show="searchVisible">
           <el-row>
-            <el-col :span="12">
-              <el-input v-power="$codes.role.view" placeholder="请输入内容" v-model="req.value" size="mini"></el-input>
-            </el-col>
-            <el-col :span="12">
-              <el-button v-power="$codes.role.view" type="primary" size="mini" plain @click="load">查询</el-button>
-            </el-col>
+            <el-form :inline="true" size="mini">
+              <el-form-item label="关键字">
+                <el-input v-model="req.value" show-word-limit clearable maxlength="20"></el-input>
+              </el-form-item>
+              <el-form-item label="ID">
+                <el-input v-model="req.id" show-word-limit clearable maxlength="11"></el-input>
+              </el-form-item>
+              <el-form-item label="角色">
+                <el-select v-model="req.roleId" filterable placeholder="请选择">
+                  <el-option
+                    v-for="v in roleList"
+                    :key="v.id"
+                    :label="v.name"
+                    :value="v.id">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+
+              <el-form-item label="来源">
+                <el-select v-model="req.source" filterable placeholder="请选择">
+                  <el-option
+                    v-for="(v,i) in sources"
+                    :key="i"
+                    :label="v"
+                    :value="v">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+
+              <el-form-item label="创建时间">
+                <el-date-picker
+                  v-model="dateRange"
+                  type="daterange"
+                  align="right"
+                  unlink-panels
+                  range-separator="至"
+                  start-placeholder="开始日期"
+                  end-placeholder="结束日期"
+                  :picker-options="pickerOptions">
+                </el-date-picker>
+              </el-form-item>
+              <el-form-item size="mini">
+                <el-button type="primary" size="mini" @click="load">搜索</el-button>
+                <el-button type="info" size="mini" @click="resetReq">重置</el-button>
+              </el-form-item>
+            </el-form>
           </el-row>
         </el-card>
       </el-collapse-transition>
@@ -230,24 +270,37 @@
       :title="editReq.title"
       :append-to-body="true"
       :visible.sync="dialogVisible">
-
       <el-row :gutter="10">
         <el-tabs tab-position="left" style="height: 200px;">
           <el-tab-pane label="基本信息">
-
+            <el-form size="mini" label-position="left">
+              <el-col :span="3">
+                <el-form-item label="">
+                  <el-avatar shape="square" :size="50" src="https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png"></el-avatar>
+                </el-form-item>
+              </el-col>
+              <el-col :span="20">
+                <el-form-item label="账号">
+                  <span>Ax12313</span>
+                </el-form-item>
+                <el-form-item label="昵称">
+                  <span>张三</span>
+                </el-form-item>
+              </el-col>
+            </el-form>
           </el-tab-pane>
           <el-tab-pane label="高级设置">
 
           </el-tab-pane>
           <el-tab-pane label="最近事件">
-            <el-timeline :reverse="true">
-              <el-timeline-item
-                v-for="(activity, index) in activities"
-                :key="index"
-                :timestamp="activity.timestamp">
-                {{activity.content}}
-              </el-timeline-item>
-            </el-timeline>
+<!--            <el-timeline :reverse="true">-->
+<!--              <el-timeline-item-->
+<!--                v-for="(activity, index) in activities"-->
+<!--                :key="index"-->
+<!--                :timestamp="activity.timestamp">-->
+<!--                {{activity.content}}-->
+<!--              </el-timeline-item>-->
+<!--            </el-timeline>-->
           </el-tab-pane>
         </el-tabs>
       </el-row>

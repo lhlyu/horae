@@ -95,4 +95,21 @@ export default ({ mock }) => {
       }]
     }]
   })
+
+  // 查询角色列表
+  Mock.mock(api.RoleListApi.u, api.RoleListApi.m, data => {
+    const items = []
+    for (let i = 0; i < 10; i++) {
+      const item = {
+        id: i + 1,
+        name: '管理者' + i
+      }
+      items.push(item)
+    }
+    return {
+      code: 0,
+      message: 'success',
+      data: items
+    }
+  })
 }

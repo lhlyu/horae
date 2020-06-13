@@ -124,4 +124,11 @@ export default ({ mock }) => {
     message: 'success',
     data: null
   })
+
+  // 获取用户来源
+  Mock.mock(api.SourcesApi.u, api.SourcesApi.m, {
+    code: 0,
+    message: 'success',
+    data: sources
+  })
 }
