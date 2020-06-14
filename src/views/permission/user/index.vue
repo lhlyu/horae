@@ -271,43 +271,95 @@
       :append-to-body="true"
       :visible.sync="dialogVisible">
       <el-row :gutter="10">
-        <el-tabs tab-position="left" style="height: 200px;">
+        <el-tabs tab-position="right">
           <el-tab-pane label="基本信息">
-            <el-form size="mini" label-position="left">
-              <el-col :span="3">
+            <el-form size="mini" label-position="left" label-suffix="：">
+              <el-col :span="4">
                 <el-form-item label="">
                   <el-avatar shape="square" :size="50" src="https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png"></el-avatar>
                 </el-form-item>
               </el-col>
-              <el-col :span="20">
+              <el-col :span="10">
+                <el-form-item label="ID">
+                  <span>2313</span>
+                </el-form-item>
                 <el-form-item label="账号">
                   <span>Ax12313</span>
                 </el-form-item>
+                <el-form-item label="来源">
+                  <span>Github</span>
+                </el-form-item>
+                <el-form-item label="个人网站">
+                  <span><el-link href="http://github.com" target="_blank" type="primary">链接</el-link></span>
+                </el-form-item>
+                <el-form-item label="更新时间">
+                  <span><Time type="datetime" :time="1589017294016"></Time> </span>
+                </el-form-item>
+              </el-col>
+              <el-col :span="10">
+                <el-form-item label="第三方ID">
+                  <span>957</span>
+                </el-form-item>
                 <el-form-item label="昵称">
                   <span>张三</span>
+                </el-form-item>
+                <el-form-item label="个性签名">
+                  <span>起风了 唯有努力生存</span>
+                </el-form-item>
+                <el-form-item label="最后访问时间">
+                  <span><Time :time="1589017294016"></Time> </span>
+                </el-form-item>
+                <el-form-item label="创建时间">
+                  <span><Time type="datetime" :time="1589017294016"></Time> </span>
                 </el-form-item>
               </el-col>
             </el-form>
           </el-tab-pane>
           <el-tab-pane label="高级设置">
-
+            <el-form size="mini" label-position="left" label-suffix="：">
+              <el-col :span="12">
+                <el-form-item label="角色">
+                  <el-select v-model="req.roleId" filterable placeholder="请选择">
+                    <el-option
+                      v-for="v in roleList"
+                      :key="v.id"
+                      :label="v.name"
+                      :value="v.id">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="状态">
+                  <el-select v-model="req.roleId" filterable placeholder="请选择">
+                    <el-option
+                      v-for="v in roleList"
+                      :key="v.id"
+                      :label="v.name"
+                      :value="v.id">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="24">
+                <el-form-item size="mini">
+                  <el-button type="primary" size="mini" plain>取 消</el-button>
+                  <el-button type="warning" size="mini" plain>确 定</el-button>
+                </el-form-item>
+              </el-col>
+            </el-form>
           </el-tab-pane>
           <el-tab-pane label="最近事件">
-<!--            <el-timeline :reverse="true">-->
-<!--              <el-timeline-item-->
-<!--                v-for="(activity, index) in activities"-->
-<!--                :key="index"-->
-<!--                :timestamp="activity.timestamp">-->
-<!--                {{activity.content}}-->
-<!--              </el-timeline-item>-->
-<!--            </el-timeline>-->
+            <div>
+              <span>青春是一个短暂的美梦, 当你醒来时, 它早已消失无踪</span>
+              <el-divider></el-divider>
+              <span>少量的邪恶足以抵消全部高贵的品质, 害得人声名狼藉</span>
+            </div>
           </el-tab-pane>
         </el-tabs>
       </el-row>
-
       <span slot="footer" v-if="!editReq.viewMode" class="dialog-footer">
-        <el-button type="primary" size="mini" plain @click="dialogVisible = false">取 消</el-button>
-        <el-button type="warning" size="mini" plain v-throttling="editThrottling">确 定</el-button>
+        <el-button type="primary" size="mini" plain @click="dialogVisible = false">关闭</el-button>
       </span>
     </el-dialog>
     <!-- 弹出层 end -->
