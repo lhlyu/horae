@@ -136,6 +136,12 @@ export default {
         }
       })
     },
+    isEmpty(data){
+      if(data && data.length){
+        return false
+      }
+      return true
+    },
     resetReq () {
       this.dateRange = ''
       this.req = {

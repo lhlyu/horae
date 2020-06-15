@@ -69,7 +69,7 @@ export default {
     async initData () {
       const powerTree = await this.$request.fetchPowerTree()
       if(!powerTree.code){
-        this.powerTree = v.data
+        this.powerTree = powerTree.data
       }
     },
     // 加载数据
