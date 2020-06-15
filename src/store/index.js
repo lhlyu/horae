@@ -6,6 +6,7 @@ import createPersistedState from 'vuex-persistedstate'
 // load modules
 import layout from './modules/layout/index'
 import user from './modules/user/index'
+import quanta from './modules/quanta/index'
 
 Vue.use(Vuex)
 
@@ -33,7 +34,8 @@ export default new Vuex.Store({
   },
   modules: {
     layout,
-    user
+    user,
+    quanta
   },
   plugins: [createPersistedState({
     storage: window.sessionStorage,

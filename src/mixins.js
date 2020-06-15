@@ -34,6 +34,13 @@ Vue.mixin({
           cb()
         }, this.$isMobile ? 0 : 400)
       }
+    },
+    isEmpty(data){
+      if(data && data.length){
+        return false
+      }
+      return true
     }
   }
+
 })

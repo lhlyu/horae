@@ -66,15 +66,15 @@ export default {
       this.load()
     },
     // 初始数据
-    initData () {
-      const powerTree = this.$request.fetchPowerTree()
-      powerTree.then(v => {
+    async initData () {
+      const powerTree = await this.$request.fetchPowerTree()
+      if(!powerTree.code){
         this.powerTree = v.data
-      })
+      }
     },
     // 加载数据
     load () {
-      const resp = this.$request.fetchRoles(this.req)
+      const resp = this.$request.fetchRolePage(this.req)
       resp.then(v => {
         if (!v.code) {
           this.items = v.data.list

@@ -1,5 +1,7 @@
 import Time from '@/components/Time'
 
+import { mapState,mapActions } from 'vuex'
+
 export default {
   name: 'role',
   components: {
@@ -8,7 +10,8 @@ export default {
   data () {
     return {
       searchVisible: true,
-      dialogVisible: false,
+      addDialogVisible: false,
+      editDialogVisible: false,
       treeProps: {
         children: 'children',
         label: 'name'
@@ -40,16 +43,6 @@ export default {
           }
         }]
       },
-      activities: [{
-        content: '活动按期开始',
-        timestamp: '2018-04-15'
-      }, {
-        content: '通过审核',
-        timestamp: '2018-04-13'
-      }, {
-        content: '创建成功',
-        timestamp: '2018-04-11'
-      }],
       tabCol: {
         seq: true,
         id: true,
@@ -69,8 +62,6 @@ export default {
         createdAt: false,
         updatedAt: false
       },
-      roleList: [],
-      sources: [],
       item: null,
       items: [],
       selectReq: {
@@ -87,6 +78,9 @@ export default {
         pageSize: 10,
         pageNum: 1,
         total: 0
+      },
+      addReq: {
+
       },
       editReq: {
         viewMode: false,
@@ -116,19 +110,15 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['SET_ROLE_LIST','SET_USER_STATE_LIST','SET_SOURCE_LIST']),
     // 初始化
     init () {
       this.load()
     },
-    async initData () {
-      const roleListResult = await this.$request.fetchRoleList()
-      const sourcesResult = await this.$request.fetchSources()
-      if (!roleListResult.code) {
-        this.roleList = roleListResult.data
-      }
-      if (!sourcesResult.code) {
-        this.sources = sourcesResult.data
-      }
+    initData () {
+      this.SET_ROLE_LIST()
+      this.SET_USER_STATE_LIST()
+      this.SET_SOURCE_LIST()
     },
     // 加载数据
     load () {
@@ -136,8 +126,7 @@ export default {
         this.req.start = +this.dateRange[0]
         this.req.end = +this.dateRange[1]
       }
-      console.log(this.req)
-      const resp = this.$request.fetchUsers(this.req)
+      const resp = this.$request.fetchUserPage(this.req)
       resp.then(v => {
         if (!v.code) {
           this.items = v.data.list
@@ -163,50 +152,32 @@ export default {
       this.req.pageSize = val
       this.load()
     },
-    handlerClose () {
-      this.$refs.tree.setCheckedKeys([])
-    },
     handleAdd () {
-      this.editReq = {
-        viewMode: false,
-        title: '添加角色',
-        id: 0,
-        name: '',
-        remark: '',
-        powers: [],
-        enable: 0
+      this.addReq = {
+        account: '',
+        password: '',
+        roleId: 1,
+        state: 'normal'
       }
-      this.dialogVisible = true
-    },
-    handleView (index, row) {
-      this.editReq = {
-        viewMode: true,
-        title: '查看角色',
-        id: row.id,
-        name: row.name,
-        remark: row.remark,
-        powers: row.powers,
-        enable: row.enable
-      }
-      this.dialogVisible = true
-      this.$nextTick(() => {
-        this.$refs.tree.setCheckedKeys(row.powers)
-      })
+      this.addDialogVisible = true
     },
     handleEdit (index, row) {
       this.editReq = {
-        viewMode: false,
-        title: '编辑角色',
         id: row.id,
-        name: row.name,
-        remark: row.remark,
-        powers: row.powers,
-        enable: row.enable
+        account: row.account,
+        avatar: row.avatar,
+        source: row.source,
+        url: row.url,
+        thirdId: row.thirdId,
+        nickName: row.nickName,
+        bio: row.bio,
+        roleId: row.role.id,
+        state: row.state,
+        lastAt: row.lastAt,
+        createdAt: row.createdAt,
+        updatedAt: row.updatedAt
       }
-      this.dialogVisible = true
-      this.$nextTick(() => {
-        this.$refs.tree.setCheckedKeys(row.powers)
-      })
+      this.editDialogVisible = true
     },
     handleSelectionChange (val) {
       if (val && val.length) {
@@ -220,12 +191,12 @@ export default {
       this.selectReq.ids = []
     },
     del (index, row) {
-      this.$confirm(`此操作将删除该角色『${row.name}』, 是否继续?`, '提示', {
+      this.$confirm(`此操作将删除该用户『${row.account}』, 是否继续?`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$request.fetchDelUser(this.editReq).then(v => {
+        this.$request.fetchDelUser({id:row.id}).then(v => {
           if (v.code) {
             this.$message.warning('删除失败！')
             return
@@ -236,7 +207,7 @@ export default {
       })
     },
     delSelection () {
-      this.$confirm('此操作将删除所有选中的角色, 是否继续?', '提示', {
+      this.$confirm('此操作将删除所有选中的用户, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -271,20 +242,40 @@ export default {
         })
       })
     },
-    edit () {
-      if (this.editReq.name.trim() === '') {
-        this.$message.warning('角色名字不能为空！')
+    add(){
+      if(this.isEmpty(this.addReq.account)){
+        this.$message.warning(`账号不能空！`)
         return
       }
-      const tip = this.editReq.id === 0 ? '新增' : '修改'
-      this.$request.fetchEditRole(this.editReq).then(v => {
+      if(this.isEmpty(this.addReq.password)){
+        this.$message.warning(`密码不能空！`)
+        return
+      }
+      this.$request.fetchEditRole(this.addReq).then(v => {
         if (v.code) {
-          this.$message.warning(`${tip}失败！`)
+          this.$message.warning(`新增失败！`)
           return
         }
-        this.$message.success(`${tip}成功！`)
+        this.$message.success(`新增成功！`)
+        this.load()
+      })
+    },
+    edit () {
+      this.$request.fetchEditRole(this.editReq).then(v => {
+        if (v.code) {
+          this.$message.warning(`修改失败！`)
+          return
+        }
+        this.$message.success(`修改成功！`)
         this.load()
       })
     }
+  },
+  computed:{
+    ...mapState({
+      roleList: state => state.quanta.roleList,
+      sourceList: state => state.quanta.sourceList,
+      userStateList: state => state.quanta.userStateList,
+    })
   }
 }

@@ -166,7 +166,7 @@
       :visible.sync="dialogVisible">
       <el-row :gutter="10">
         <el-col :span="8">
-          <el-form label-position="top" label-width="80px"size="mini" :disabled="editReq.viewMode">
+          <el-form label-position="top" size="mini"  label-suffix="：" :disabled="editReq.viewMode">
             <el-form-item label="权限树">
               <el-tree
                 ref="tree"

@@ -10,18 +10,9 @@ export default ({ mock }) => {
   Mock.setup({
     timeout: '200-1000'
   })
-  // 用户登录
-  Mock.mock(api.LoginApi.u, api.LoginApi.m, {
-    code: 0,
-    message: 'success',
-    data: {
-      codes: [10, 12, 1201, 120101, 120102, 120103, 1202, 120201, 120202, 120203],
-      name: 'lhlyu'
-    }
-  })
 
   // 获取用户列表
-  Mock.mock(RegExp(api.UsersApi.u + '.*'), api.UsersApi.m, data => {
+  Mock.mock(RegExp(api.UserPageApi.u + '.*'), api.UserPageApi.m, data => {
     const req = {
       value: getQueryString('value', data.url),
       id: parseInt(getQueryString('id', data.url)),
@@ -71,7 +62,7 @@ export default ({ mock }) => {
   })
 
   // 获取单个用户
-  Mock.mock(RegExp(api.UserApi.u + '.*'), api.UserApi.m, data => {
+  Mock.mock(RegExp(api.UserInfoApi.u + '.*'), api.UserInfoApi.m, data => {
     const req = {
       id: getQueryString('id', data.url)
     }
@@ -94,16 +85,6 @@ export default ({ mock }) => {
       createdAt: Mock.Random.natural(1582969294016, 1589017294016),
       updatedAt: Mock.Random.natural(1589017294016, 1591609294016)
     }
-    const number = Mock.Random.natural(2, 5)
-    const events = []
-    for (let i = 0; i < number; i++) {
-      const event = {
-        event: Mock.Random.ctitle(),
-        at: Mock.Random.natural(1589017294016, 1591609294016)
-      }
-      events.push(event)
-    }
-    item.events = events
     return {
       code: 0,
       message: 'success',
@@ -112,23 +93,23 @@ export default ({ mock }) => {
   })
 
   // 编辑用户
-  Mock.mock(api.EditUser.u, api.EditUser.m, {
+  Mock.mock(api.EditUserApi.u, api.EditUserApi.m, {
     code: 0,
     message: 'success',
     data: null
   })
 
   // 删除用户
-  Mock.mock(api.DelUser.u, api.DelUser.m, {
+  Mock.mock(api.DelUserApi.u, api.DelUserApi.m, {
     code: 0,
     message: 'success',
     data: null
   })
 
-  // 获取用户来源
-  Mock.mock(api.SourcesApi.u, api.SourcesApi.m, {
+  // 删除多个用户
+  Mock.mock(api.DelUsersApi.u, api.DelUsersApi.m, {
     code: 0,
     message: 'success',
-    data: sources
+    data: null
   })
 }

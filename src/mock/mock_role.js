@@ -8,8 +8,9 @@ export default ({ mock }) => {
   Mock.setup({
     timeout: '200-1000' // 模拟延迟
   })
+
   // 获取角色列表
-  Mock.mock(RegExp(api.RolesApi.u + '.*'), api.RolesApi.m, data => {
+  Mock.mock(RegExp(api.RolePageApi.u + '.*'), api.RolePageApi.m, data => {
     const req = {
       value: getQueryString('value', data.url),
       pageNum: parseInt(getQueryString('pageNum', data.url)),
@@ -43,6 +44,24 @@ export default ({ mock }) => {
         },
         list: items
       }
+    }
+  })
+
+  // 获取角色信息
+  Mock.mock(RegExp(api.RoleInfoApi.u + '.*'), api.RoleInfoApi.m, data => {
+    const item = {
+      id: Mock.Random.natural(1, 1000),
+      name: '管理者' + i,
+      remark: Mock.Random.cname(),
+      enable: Mock.Random.natural(0, 1),
+      powers: [10, 12, 1201, 1202, 120201, 120202],
+      createdAt: Mock.Random.natural(1582969294016, 1589017294016),
+      updatedAt: Mock.Random.natural(1589017294016, 1591609294016)
+    }
+    return {
+      code: 0,
+      message: 'success',
+      data: item
     }
   })
 
@@ -94,22 +113,5 @@ export default ({ mock }) => {
         }]
       }]
     }]
-  })
-
-  // 查询角色列表
-  Mock.mock(api.RoleListApi.u, api.RoleListApi.m, data => {
-    const items = []
-    for (let i = 0; i < 10; i++) {
-      const item = {
-        id: i + 1,
-        name: '管理者' + i
-      }
-      items.push(item)
-    }
-    return {
-      code: 0,
-      message: 'success',
-      data: items
-    }
   })
 }

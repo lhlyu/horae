@@ -15,9 +15,9 @@
                 <el-select v-model="req.roleId" filterable placeholder="请选择">
                   <el-option
                     v-for="v in roleList"
-                    :key="v.id"
-                    :label="v.name"
-                    :value="v.id">
+                    :key="v.key"
+                    :label="v.value"
+                    :value="v.key">
                   </el-option>
                 </el-select>
               </el-form-item>
@@ -25,10 +25,10 @@
               <el-form-item label="来源">
                 <el-select v-model="req.source" filterable placeholder="请选择">
                   <el-option
-                    v-for="(v,i) in sources"
-                    :key="i"
-                    :label="v"
-                    :value="v">
+                    v-for="(v,i) in sourceList"
+                    :key="v.key"
+                    :label="v.value"
+                    :value="v.key">
                   </el-option>
                 </el-select>
               </el-form-item>
@@ -226,12 +226,6 @@
             align="center">
             <template slot-scope="scope">
               <el-button
-                v-power="$codes.user.view"
-                size="mini"
-                type="text"
-                icon="el-icon-view"
-                @click="handleView(scope.$index, scope.row)">查看</el-button>
-              <el-button
                 v-power="$codes.user.upd"
                 size="mini"
                 type="text"
@@ -264,53 +258,94 @@
       <!-- 数据表格 end -->
     </el-row>
 
-    <!-- 弹出层 start -->
+    <!-- 新增用户弹出层 start -->
     <el-dialog
-      @close="handlerClose"
-      :title="editReq.title"
+      title="新增用户"
       :append-to-body="true"
-      :visible.sync="dialogVisible">
+      :visible.sync="addDialogVisible">
+      <el-row :gutter="10">
+        <el-form size="mini" label-suffix="：">
+          <el-form-item label="账号">
+            <el-input v-model="addReq.account"></el-input>
+          </el-form-item>
+          <el-form-item label="密码">
+            <el-input v-model="addReq.password"></el-input>
+          </el-form-item>
+          <el-form-item label="角色">
+            <el-select v-model="addReq.roleId" filterable placeholder="请选择">
+              <el-option
+                v-for="v in roleList"
+                :key="v.key"
+                :label="v.value"
+                :value="v.key">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="状态">
+            <el-select v-model="addReq.state" filterable placeholder="请选择">
+              <el-option
+                v-for="v in userStateList"
+                :key="v.key"
+                :label="v.value"
+                :value="v.key">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-form>
+      </el-row>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" size="mini" @click="add">创建</el-button>
+        <el-button type="info" size="mini" plain @click="addDialogVisible = false">关闭</el-button>
+      </span>
+    </el-dialog>
+    <!-- 新增用户弹出层 end -->
+
+    <!-- 编辑用户弹出层 start -->
+    <el-dialog
+      title="编辑用户"
+      :append-to-body="true"
+      :visible.sync="editDialogVisible">
       <el-row :gutter="10">
         <el-tabs tab-position="right">
           <el-tab-pane label="基本信息">
             <el-form size="mini" label-position="left" label-suffix="：">
               <el-col :span="4">
                 <el-form-item label="">
-                  <el-avatar shape="square" :size="50" src="https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png"></el-avatar>
+                  <el-avatar shape="square" :size="50" :src="editReq.avatar"></el-avatar>
                 </el-form-item>
               </el-col>
               <el-col :span="10">
                 <el-form-item label="ID">
-                  <span>2313</span>
+                  <span>{{editReq.id}}</span>
                 </el-form-item>
                 <el-form-item label="账号">
-                  <span>Ax12313</span>
+                  <span>{{editReq.account}}</span>
                 </el-form-item>
                 <el-form-item label="来源">
-                  <span>Github</span>
+                  <span>{{editReq.source}}</span>
                 </el-form-item>
                 <el-form-item label="个人网站">
-                  <span><el-link href="http://github.com" target="_blank" type="primary">链接</el-link></span>
+                  <span><el-link :href="editReq.url" target="_blank" type="primary">链接</el-link></span>
                 </el-form-item>
                 <el-form-item label="更新时间">
-                  <span><Time type="datetime" :time="1589017294016"></Time> </span>
+                  <span><Time type="datetime" :time="editReq.updatedAt"></Time> </span>
                 </el-form-item>
               </el-col>
               <el-col :span="10">
                 <el-form-item label="第三方ID">
-                  <span>957</span>
+                  <span>{{editReq.thirdId}}</span>
                 </el-form-item>
                 <el-form-item label="昵称">
-                  <span>张三</span>
+                  <span>{{editReq.nickName}}</span>
                 </el-form-item>
                 <el-form-item label="个性签名">
-                  <span>起风了 唯有努力生存</span>
+                  <span>{{editReq.bio}}</span>
                 </el-form-item>
                 <el-form-item label="最后访问时间">
-                  <span><Time :time="1589017294016"></Time> </span>
+                  <span><Time :time="editReq.lastAt"></Time> </span>
                 </el-form-item>
                 <el-form-item label="创建时间">
-                  <span><Time type="datetime" :time="1589017294016"></Time> </span>
+                  <span><Time type="datetime" :time="editReq.createdAt"></Time> </span>
                 </el-form-item>
               </el-col>
             </el-form>
@@ -319,50 +354,42 @@
             <el-form size="mini" label-position="left" label-suffix="：">
               <el-col :span="12">
                 <el-form-item label="角色">
-                  <el-select v-model="req.roleId" filterable placeholder="请选择">
+                  <el-select v-model="editReq.roleId" filterable placeholder="请选择">
                     <el-option
                       v-for="v in roleList"
-                      :key="v.id"
-                      :label="v.name"
-                      :value="v.id">
+                      :key="v.key"
+                      :label="v.value"
+                      :value="v.key">
                     </el-option>
                   </el-select>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
                 <el-form-item label="状态">
-                  <el-select v-model="req.roleId" filterable placeholder="请选择">
+                  <el-select v-model="editReq.state" filterable placeholder="请选择">
                     <el-option
-                      v-for="v in roleList"
-                      :key="v.id"
-                      :label="v.name"
-                      :value="v.id">
+                      v-for="v in userStateList"
+                      :key="v.key"
+                      :label="v.value"
+                      :value="v.key">
                     </el-option>
                   </el-select>
                 </el-form-item>
               </el-col>
               <el-col :span="24">
                 <el-form-item size="mini">
-                  <el-button type="primary" size="mini" plain>取 消</el-button>
-                  <el-button type="warning" size="mini" plain>确 定</el-button>
+                  <el-button type="warning" size="mini" plain @click="edit">修改</el-button>
                 </el-form-item>
               </el-col>
             </el-form>
           </el-tab-pane>
-          <el-tab-pane label="最近事件">
-            <div>
-              <span>青春是一个短暂的美梦, 当你醒来时, 它早已消失无踪</span>
-              <el-divider></el-divider>
-              <span>少量的邪恶足以抵消全部高贵的品质, 害得人声名狼藉</span>
-            </div>
-          </el-tab-pane>
         </el-tabs>
       </el-row>
-      <span slot="footer" v-if="!editReq.viewMode" class="dialog-footer">
-        <el-button type="primary" size="mini" plain @click="dialogVisible = false">关闭</el-button>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" size="mini" plain @click="editDialogVisible = false">关闭</el-button>
       </span>
     </el-dialog>
-    <!-- 弹出层 end -->
+    <!-- 编辑用户弹出层 end -->
   </div>
 </template>
 
