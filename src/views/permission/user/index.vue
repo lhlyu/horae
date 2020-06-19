@@ -264,7 +264,7 @@
       :append-to-body="true"
       :visible.sync="addDialogVisible">
       <el-row :gutter="10">
-        <el-form size="mini" label-suffix="：">
+        <el-form size="mini" label-suffix="：" label-width="80px">
           <el-form-item label="账号">
             <el-input v-model="addReq.account"></el-input>
           </el-form-item>

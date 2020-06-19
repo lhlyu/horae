@@ -43,6 +43,34 @@ const roleApis = {
   PowerTreeApi: S('/api/admin/power/tree')
 }
 
+// 文章API ------------------------------------------------------------------------------
+const articleApis = {
+  // 文章
+  ArticlePageApi: S('/api/admin/article/page'),
+  // 文章详情
+  ArticleInfoApi: S('/api/admin/article/info'),
+  // 编辑文章
+  EditArticleApi: S('/api/admin/article','post'),
+  // 删除文章
+  DelArticleApi: S('/api/admin/article','delete'),
+  // 删除多篇文章
+  DelArticlesApi: S('/api/admin/articles','delete')
+}
+
+// 分类API ------------------------------------------------------------------------------
+const categoryApis = {
+  // 分类
+  CategoryPageApi: S('/api/admin/category/page'),
+  // 分类详情
+  CategoryInfoApi: S('/api/admin/category/info'),
+  // 编辑分类
+  EditCategoryApi: S('/api/admin/category','post'),
+  // 删除分类
+  DelCategoryApi: S('/api/admin/category','delete'),
+  // 删除多篇分类
+  DelCategorysApi: S('/api/admin/category','delete')
+}
+
 // 枚举API ------------------------------------------------------------------------------
 const enumApis = {
   // 角色列表
@@ -50,7 +78,17 @@ const enumApis = {
   // 用户状态
   UserStateListApi: S('/api/admin/user/state/list'),
   // 获取用户来源
-  SourceListApi: S('/api/admin/source/list')
+  SourceListApi: S('/api/admin/source/list'),
+  // 分类列表
+  CategoryListApi: S('/api/admin/category/list'),
+  // 文章状态列表
+  ArticleStateListApi: S('/api/admin/article/state/list'),
+  // 标签列表
+  LabelListApi: S('/api/admin/label/list'),
+  // 文章类型列表
+  ArticleKindListApi: S('/api/admin/article/kind/list'),
+  // 评论状态
+  CommentStateListApi: S('/api/admin/comment/state/list'),
 
 }
 

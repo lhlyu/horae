@@ -97,7 +97,17 @@ export default ({ mock }) => {
       name: '权限',
       children: [{
         id: 1201,
-        name: '用户'
+        name: '用户',
+        children: [{
+          id: 120101,
+          name: '用户添加'
+        }, {
+          id: 120102,
+          name: '用户删除'
+        }, {
+          id: 120103,
+          name: '用户更改'
+        }]
       }, {
         id: 1202,
         name: '角色',

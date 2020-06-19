@@ -11,6 +11,8 @@ import './directives'
 // 引入第三方组件
 import ElementUi from 'element-ui'
 
+import 'vditor/src/assets/scss/index.scss'
+
 Vue.use(ElementUi)
 
 // vue配置
