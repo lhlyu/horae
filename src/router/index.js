@@ -1,34 +1,43 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-
-import { routes } from './route'
-import store from '@/store/index.js'
-import { getRoutes, getDynamicRoutes } from '@/router/dynamic.js'
+// import store from '@/store'
+import routes from './basic_routers'
+import { getMenus, getDynamicRoutes } from '@/router/add_routers'
 
 Vue.use(VueRouter)
 
-const originalPush = VueRouter.prototype.push
-VueRouter.prototype.push = function push (location) {
-  return originalPush.call(this, location).catch(err => err)
-}
-
 const router = new VueRouter({
-  // base: process.env.BASE_URL,
   routes
 })
 
+// const whiteList = ['login', '404']
+const loginRoutePath = '/'
+const defaultRoutePath = '/admin'
+
+router.$addRoutes = () => {
+  const codes = window.sessionStorage.getItem('codes')
+  if (codes) {
+    const addRoutes = getDynamicRoutes(getMenus(JSON.parse(codes)))
+    router.matcher = new VueRouter({ mode: 'hash' }).matcher
+    router.addRoutes(addRoutes)
+  }
+}
+
+router.$addRoutes()
+
 router.beforeEach((to, from, next) => {
-  if (!store.state.token) {
-    const token = window.sessionStorage.getItem('token')
-    if (token) {
-      const items = getRoutes(store.state.user.codes)
-      const routers = getDynamicRoutes(items)
-      store.commit('SET_TOKEN', token)
-      store.commit('SET_MENULIST', items)
-      store.commit('SET_ROUTERS', routers)
-      router.addRoutes(routers)
-      next(to.path)
+  const token = sessionStorage.getItem('token')
+  if (to.path === '/') {
+    if (token && token.length) {
+      next(defaultRoutePath)
+      return
     }
+    next()
+    return
+  }
+  if (!token || !token.length) {
+    next(loginRoutePath)
+    return
   }
   next()
 })

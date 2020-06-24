@@ -1,48 +1,74 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
+import request from '@/api/apis.js'
 // load plugin
 import createPersistedState from 'vuex-persistedstate'
 // load modules
-import layout from './modules/layout/index'
-import user from './modules/user/index'
-import quanta from './modules/quanta/index'
+import layout from './modules/layout'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    routers: null,
-    token: null
+    token: '',
+    codes: [],
+    profile: null,
+    options: null
   },
   getters: {
-    getToken: state => state.token
+    getOptions: state => {
+      return Object.assign({
+        lockMenu: false,
+        pageSize: 6
+      }, state.options)
+    }
   },
   mutations: {
-    SET_ROUTERS (state, val) {
-      state.routers = val
-    },
     SET_TOKEN (state, val) {
+      sessionStorage.setItem('token', val)
       state.token = val
-      window.sessionStorage.setItem('token', val)
+    },
+    SET_CODES (state, val) {
+      console.log('val:', val)
+      sessionStorage.setItem('codes', JSON.stringify(val))
+      state.codes = val
+    },
+    SET_PROFILE (state, val) {
+      state.profile = val
+    },
+    SET_OPTIONS (state, val) {
+      state.options = val
+    },
+    LOGOUT (state, val) {
+      state.token = ''
+      state.codes = []
+      state.profile = null
+      state.options = null
+      state.layout.menus = []
     }
   },
   actions: {
-    addTab ({ commit }, arg) {
-      commit('addTab', arg)
+    async LOGOUT ({ commit }, arg) {
+      const result = await request.fetchLogout()
+      if (result.code) {
+        console.log('logout.error:', result.message)
+      }
+      commit('LOGOUT', arg)
     }
   },
   modules: {
-    layout,
-    user,
-    quanta
+    layout
   },
   plugins: [createPersistedState({
     storage: window.sessionStorage,
     reducer (state) {
       return {
-        layout: state.layout,
-        user: state.user
+        token: state.token,
+        codes: state.codes,
+        profile: state.profile,
+        options: state.options,
+        layout: state.layout
       }
     }
   })]

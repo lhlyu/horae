@@ -1,92 +1,68 @@
 <template>
-  <el-container>
-    <el-aside width="250px" :class="fold ? 'u-fold':''"><ASide></ASide></el-aside>
-    <el-container  class="u-transition"  v-loading="isLoading">
-      <el-header><Header></Header></el-header>
-      <el-breadcrumb separator="/">
-        <el-breadcrumb-item v-for="(item,i) in breadcrumbItems" :key="i">{{item.name}}</el-breadcrumb-item>
-      </el-breadcrumb>
-      <el-main>
-        <transition name="fade">
-          <keep-alive>
-            <router-view></router-view>
-          </keep-alive>
-        </transition>
-      </el-main>
-      <el-footer><Footer></Footer></el-footer>
-    </el-container>
-  </el-container>
+  <div class="u-layout u-transition">
+    <div class="u-aside u-transition" ref="aside">
+      <div @mouseenter="changeWidth(true)" style="width:4px;position:absolute;left:0;top:21px;bottom:128px;z-index:9999;"></div>
+      <ASide></ASide>
+    </div>
+    <div class="u-main u-transition"  @mouseenter="changeWidth(false)">
+      <Header></Header>
+      <main>
+        <router-view/>
+      </main>
+    </div>
+  </div>
 </template>
 
 <script>
 
-  import {mapState} from "vuex"
+import ASide from './components/ASide'
+import Header from './components/Header'
 
-  import Header from "@/layout/Header"
-  import ASide from "@/layout/ASide"
-  import Footer from "@/layout/Footer"
+import { mapGetters } from 'vuex'
 
-  export default {
-    name: "layout",
-    components: {
-      Header,
-      ASide,
-      Footer
-    },
-    mounted(){
-    },
-    computed:{
-      ...mapState({
-        breadcrumbItems: state => state.layout.breadcrumbItems,
-        fold: state => state.layout.fold,
-        isLoading: state => state.layout.isLoading,
-      })
+export default {
+  name: 'index',
+  components: {
+    ASide,
+    Header
+  },
+  data () {
+    return {
+      flag: true
     }
+  },
+  methods: {
+    changeWidth (flag) {
+      if (this.getOptions.lockMenu) {
+        return
+      }
+      if (!flag) {
+        this.$refs.aside.style.width = '0px'
+      } else {
+        this.$refs.aside.style.width = '275px'
+      }
+    }
+  },
+  computed: {
+    ...mapGetters(['getOptions'])
   }
+}
 </script>
 <style lang="scss">
-  .el-container{
-    height: 100%;
-  }
-  .el-header, .el-footer {
-    background-color: white;
-    color: #333;
-    text-align: center;
-    line-height: 60px;
-  }
-  .el-header{
-    border-bottom: solid 1px #e6e6e6;
-  }
-  .el-footer{
-    border-top: solid 1px #e6e6e6;
-  }
-
-  .el-breadcrumb {
-    font-size: 14px;
-    line-height: 40px;
-    height: 40px;
-    padding-left: 10px;
-    background: #ffffff;
-    border-bottom: solid 1px #e6e6e6;
-  }
-
-  .el-aside {
-    background-color: #ffffff;
-    color: #333;
-    overflow-x: hidden;
-    border-right: solid 1px #e6e6e6;
-  }
-
-  .el-main {
-    background-color: #E9EEF3;
-    color: #333;
-  }
-
-  body > .el-container {
-    margin-bottom: 40px;
-  }
-
-  .u-fold{
-    width: 0px !important;
+  .u-layout{
+    min-height: 100vh;
+    display: flex;
+    .u-aside{
+      width: 275px;
+      overflow: hidden;
+      box-shadow: 2px 0 6px rgba(0,21,41,.35);
+    }
+    .u-main{
+      flex: 1;
+      background: #f0f2f5;
+      main{
+        padding: 20px;
+      }
+    }
   }
 </style>

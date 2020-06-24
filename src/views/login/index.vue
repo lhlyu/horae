@@ -1,56 +1,20 @@
 <template>
-  <div class="u-login">
-    <el-button v-throttling="loginThrottling">默认按钮</el-button>
-    <Plate></Plate>
+  <div class="u-login u-transition">
+    <Land></Land>
   </div>
 </template>
 
 <script>
+import Land from './land'
 
-  import Plate from '@/components/Plate'
-
-  import { mapMutations } from 'vuex'
-  import { getRoutes, getDynamicRoutes } from '@/router/dynamic.js'
-
-  export default {
-    name: 'index',
-    components: {
-      Plate
-    },
-    data(){
-      return {
-        loginThrottling:{
-          callback: this.login,
-          time: 2000
-        }
-      }
-    },
-    methods: {
-      ...mapMutations({
-        login (commit) {
-          const that = this
-          const resp = this.$request.fetchLogin()
-          resp.then(v => {
-            if (!!v.code) {
-              return
-            }
-            commit('SET_CODES', v.data.codes)
-            const items = getRoutes(v.data.codes)
-            if (!items.length) {
-              return
-            }
-            const routers = getDynamicRoutes(items)
-            commit('SET_MENULIST', items)
-            commit('SET_TOKEN', +new Date())
-            commit('SET_ROUTERS', routers)
-            commit('SET_ACTIVEMENU')
-            that.$router.addRoutes(routers)
-            that.$router.push({ path: '/admin' })
-          })
-        }
-      })
-    },
-    computed: {
-    }
-  }
+export default {
+  name: 'index',
+  components: {
+    Land
+  },
+  data () {
+    return {}
+  },
+  methods: {}
+}
 </script>

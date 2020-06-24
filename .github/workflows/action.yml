@@ -4,7 +4,7 @@ name: GitHub Actions Build and Deploy Horae
 on:
   push:
     branches:
-      - master
+      - alpha
 
 # 任务
 jobs:

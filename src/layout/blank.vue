@@ -1,15 +1,17 @@
 <template>
   <div>
-    <transition name="fade">
-      <keep-alive>
-        <router-view></router-view>
-      </keep-alive>
-    </transition>
+    <keep-alive>
+      <router-view/>
+    </keep-alive>
   </div>
 </template>
 
 <script>
-    export default {
-        name: "blank"
-    }
+export default {
+  name: 'blank',
+  data () {
+    return {}
+  },
+  methods: {}
+}
 </script>

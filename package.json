@@ -1,47 +1,60 @@
 {
   "name": "horae",
-  "version": "0.0.1",
-  "homepage": "https://lhlyu.github.io/horae",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "docs": "vue-cli-service build --dest docs",
-    "format": "standard --fix"
-  },
-  "standard": {
-    "ignore": [
-      "**/utils/",
-      "docs/"
-    ]
+    "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "aos": "^3.0.0-beta.6",
-    "axios": "0.18.1",
-    "clipboard": "2.0.4",
-    "core-js": "^3.6.4",
-    "element-ui": "^2.13.2",
-    "ismobilejs": "^1.0.3",
-    "js-cookie": "^2.2.1",
-    "mockjs": "^1.1.0",
-    "nprogress": "^0.2.0",
+    "animate.css": "^4.1.0",
+    "ant-design-vue": "^1.6.2",
+    "axios": "^0.19.2",
+    "core-js": "^3.6.5",
+    "ismobilejs": "^1.1.1",
+    "vditor": "3.2.12",
     "vue": "^2.6.11",
-    "vue-router": "^3.1.5",
-    "vuex": "^3.1.2",
+    "vue-router": "3.3.4",
+    "vuex": "^3.4.0",
     "vuex-persistedstate": "^3.0.1"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^4.2.0",
-    "@vue/cli-plugin-router": "^4.2.0",
-    "@vue/cli-plugin-vuex": "^4.2.0",
-    "@vue/cli-service": "^4.2.0",
+    "@vue/cli-plugin-babel": "^4.4.0",
+    "@vue/cli-plugin-eslint": "^4.4.0",
+    "@vue/cli-plugin-router": "^4.4.0",
+    "@vue/cli-plugin-vuex": "^4.4.0",
+    "@vue/cli-service": "^4.4.0",
+    "@vue/eslint-config-standard": "^5.1.2",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^6.7.2",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "eslint-plugin-vue": "^6.2.2",
+    "mockjs": "^1.1.0",
     "node-sass": "^4.12.0",
     "sass-loader": "^8.0.2",
-    "standard": "^14.3.4",
     "vue-template-compiler": "^2.6.11"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "@vue/standard"
+    ],
+    "parserOptions": {
+      "parser": "babel-eslint"
+    },
+    "rules": {}
   },
   "browserslist": [
     "> 1%",
-    "last 2 versions"
+    "last 2 versions",
+    "not dead"
   ]
 }
