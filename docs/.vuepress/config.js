@@ -18,7 +18,8 @@ module.exports = {
       sidebarDepth: 2,
       '/guide/' :[
         '/guide/tables',
-        '/guide/dict'
+        '/guide/dict',
+        '/guide/power'
       ]
     }
   }
